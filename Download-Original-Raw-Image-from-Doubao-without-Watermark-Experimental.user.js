@@ -264,7 +264,7 @@ function getImageOriRawUrl(imageUrl) {
     }
 
     if (Object.hasOwn(window.globalImageBucket, pathAndQuery)) {
-        image_ori_raw = window.globalImageBucket[pathAndQuery].image_ori_raw.url;
+        const image_ori_raw = window.globalImageBucket[pathAndQuery].image_ori_raw.url;
         return image_ori_raw;
     } else {
         console.log('pathAndQuery not found');
