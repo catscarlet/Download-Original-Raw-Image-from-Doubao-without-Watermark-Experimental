@@ -90,11 +90,17 @@ window.globalImageBucket = {};
                                 link.style.top = y + 'px';
 
                                 link.addEventListener('mouseover', function() {
+                                    if (this.style.cursor == 'not-allowed') {
+                                        return;
+                                    }
                                     this.style.backgroundColor = 'violet';
                                     this.style.cursor = 'pointer';
                                 });
 
                                 link.addEventListener('mouseout', function() {
+                                    if (this.style.cursor == 'not-allowed') {
+                                        return;
+                                    }
                                     this.style.backgroundColor = 'darkviolet';
                                     this.style.cursor = '';
                                 });
