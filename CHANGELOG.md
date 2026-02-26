@@ -2,6 +2,10 @@
 
 (from new to old)
 
+## 0.0.3
+
+- Update image url to match doubao update
+
 ## 0.0.2
 
 - Fix a global variable leak
