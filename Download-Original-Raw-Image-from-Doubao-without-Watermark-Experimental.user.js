@@ -4,7 +4,7 @@
 // @namespace       https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental
 // @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图 You can try this userscript to Download Original Raw Image from doubao.com without Watermark.
 // @description:en  You can try this userscript to Download Original Raw Image from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图
-// @version         0.0.2
+// @version         0.0.3
 // @author          catscarlet
 // @license         GNU Affero General Public License v3.0
 // @match           https://www.doubao.com/chat/*
@@ -267,9 +267,9 @@ function getImageOriRawUrl(imageUrl) {
     const url = new URL(imageUrl);
     let pathAndQuery = url.pathname + url.search + url.hash;
 
-    const postfixIndex = pathAndQuery.indexOf('preview.jpeg~tplv');
+    const postfixIndex = pathAndQuery.indexOf('.jpeg~tplv');
     if (postfixIndex !== -1) {
-        pathAndQuery = pathAndQuery.substring(0, postfixIndex); // +4是因为"pppp"长度为4
+        pathAndQuery = pathAndQuery.substring(0, postfixIndex);
         pathAndQuery = pathAndQuery.substring(1);
         pathAndQuery = pathAndQuery + '.jpeg';
     }
