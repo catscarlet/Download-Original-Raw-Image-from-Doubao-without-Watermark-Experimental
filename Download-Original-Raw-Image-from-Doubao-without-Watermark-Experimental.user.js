@@ -67,7 +67,7 @@ window.globalImageBucket = {};
 
                                 const link = document.createElement('a');
 
-                                link.textContent = '点击下载「会话名-会话ID-下载时间」为文件名的无水印原图';
+                                link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印原图';
                                 link.style.whiteSpace = 'break-spaces';
 
                                 link.classList.add('imagelink-nowatermark');
