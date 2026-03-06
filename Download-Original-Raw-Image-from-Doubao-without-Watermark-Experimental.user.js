@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name            从豆包下载无水印原图实验版 Download Original Raw Image from doubao.com without Watermark Experimental
-// @name:en         Download Origin Image from Doubao without Watermark Experimental 从豆包下载无水印原图实验版
+// @name:en         Download Original Raw Image from doubao.com without Watermark Experimental 从豆包下载无水印原图实验版
 // @namespace       https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental
 // @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图 You can try this userscript to Download Original Raw Image from doubao.com without Watermark.
 // @description:en  You can try this userscript to Download Original Raw Image from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图
