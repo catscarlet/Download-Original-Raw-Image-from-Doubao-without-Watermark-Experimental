@@ -157,47 +157,51 @@ function createModifiedXHR() {
 
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
-                    try {
-                        const jsonData = JSON.parse(xhr.responseText);
-                        window.result = jsonData;
 
-                        if (Object.hasOwn(jsonData, 'downlink_body')) {
-                            let messages = jsonData.downlink_body.pull_singe_chain_downlink_body.messages;
+                    const jsonData = JSON.parse(xhr.responseText);
+                    window.result = jsonData;
 
-                            messages.forEach((message, i) => {
+                    if (Object.hasOwn(jsonData, 'downlink_body')) {
+                        let messages = jsonData.downlink_body.pull_singe_chain_downlink_body.messages;
 
-                                if (message.user_type == 2) {
-                                    content = JSON.parse(message.content);
+                        messages.forEach((message, i) => {
 
-                                    if (Array.isArray(content)) {
-                                        let creations = content[1].content.creation_block.creations;
+                            if (message.user_type == 2 && Object.hasOwn(message, 'content') && message.content) {
+                                content = JSON.parse(message.content);
 
-                                        creations.forEach((item, j) => {
+                                if (Array.isArray(content)) {
+                                    let creations = content[1].content.creation_block.creations;
+                                    creations.forEach((item, j) => {
+                                        if (item.type == 1) {
                                             window.globalImageBucket[item.image.key] = item.image;
-                                        });
-                                    } else if (Object.hasOwn(content, 'image_list')) {
-                                        let imageList = content.image_list;
-                                        imageList.forEach((image, j) => {
-                                            window.globalImageBucket[image.key] = image.image;
-                                        });
+                                        } else if (item.type == 2) {
 
-                                    } else {
+                                        } else {
+                                            console.log('item.type unknown. item.type ==' + item.type);
+                                        }
+                                    });
 
-                                    }
+                                } else if (Object.hasOwn(content, 'image_list')) {
+                                    let imageList = content.image_list;
+                                    imageList.forEach((image, j) => {
+                                        window.globalImageBucket[image.key] = image.image;
+                                    });
 
                                 } else {
-                                    console.log('content.length == ' + content.length);
+                                    console.log(content);
                                 }
 
-                            });
+                            } else {
 
-                        } else {
-                            console.log('jsonData does not have downlink_body');
-                        }
+                            }
 
-                    } catch (jsonError) {
-                        console.warn(jsonError);
+                        });
+
+                    } else {
+                        console.log('jsonData does not have downlink_body');
                     }
+
+
                 }
             });
         }
@@ -271,17 +275,18 @@ function getImageOriRawUrl(imageUrl) {
     let pathAndQuery = url.pathname + url.search + url.hash;
 
     const postfixIndex = pathAndQuery.indexOf('.jpeg~tplv');
+
     if (postfixIndex !== -1) {
         pathAndQuery = pathAndQuery.substring(0, postfixIndex);
         pathAndQuery = pathAndQuery.substring(1);
         pathAndQuery = pathAndQuery + '.jpeg';
     }
 
-    if (Object.hasOwn(window.globalImageBucket, pathAndQuery)) {
+    if (Object.hasOwn(window.globalImageBucket, pathAndQuery) & window.globalImageBucket[pathAndQuery] != undefined) {
         const image_ori_raw = window.globalImageBucket[pathAndQuery].image_ori_raw.url;
         return image_ori_raw;
     } else {
-        console.log('pathAndQuery not found');
+        console.log('image_ori_raw not found in globalImageBucket');
 
         return false;
     }
