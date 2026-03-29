@@ -167,7 +167,7 @@ function createModifiedXHR() {
                         messages.forEach((message, i) => {
 
                             if (message.user_type == 2 && Object.hasOwn(message, 'content') && message.content) {
-                                content = JSON.parse(message.content);
+                                let content = JSON.parse(message.content);
 
                                 if (Array.isArray(content)) {
                                     let creations = content[1].content.creation_block.creations;
