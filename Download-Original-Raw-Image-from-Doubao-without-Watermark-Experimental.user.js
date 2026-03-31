@@ -29,7 +29,7 @@ window.globalImageBucket = {};
     const observer = new MutationObserver((mutationsList) => {
         const now = Date.now();
 
-        if (!throttleTimer || now - throttleTimer > 300) {
+        if (!throttleTimer || now - throttleTimer > 750) {
             throttleTimer = now;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
@@ -119,7 +119,7 @@ window.globalImageBucket = {};
                         });
                     }
                 }
-            }, 300);
+            }, 750);
         }
     });
 
