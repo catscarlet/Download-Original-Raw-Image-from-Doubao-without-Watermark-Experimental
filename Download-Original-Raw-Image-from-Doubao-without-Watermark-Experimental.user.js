@@ -220,10 +220,6 @@ async function getCrossOriginImage(link) {
     link.style.cursor = 'not-allowed';
     link.style.backgroundColor = 'grey';
 
-    const currentTitle = document.title.replace('- 豆包', '').trim();
-    const chatID = document.location.pathname.replace('/chat/', '').trim();
-    const timeStr = getYmdHMS();
-
     const imageNodelist = link.parentNode.querySelectorAll('img');
     const imageUrl = Array.from(imageNodelist).find((element) => element.alt == 'preview').src;
 
@@ -236,11 +232,11 @@ async function getCrossOriginImage(link) {
         return false;
     }
 
-    let imageName = currentTitle + '-' + chatID + '-' + timeStr;
+    let imageName = getImageName();
     if (customPostfixName) {
         imageName = imageName + '-' + customPostfixName;
     }
-    imageName = imageName + '.png';
+    imageName = imageName + '-原图.png';
 
     try {
         const response = await fetch(imageUrlV2, {mode: 'cors'});
@@ -268,6 +264,16 @@ async function getCrossOriginImage(link) {
         link.style.backgroundColor = btnOriginStyle.backgroundColor;
     }
 
+}
+
+function getImageName() {
+    const currentTitle = document.title.replace('- 豆包', '').trim();
+    const chatID = document.location.pathname.replace('/chat/', '').trim();
+    const timeStr = getYmdHMS();
+
+    const imageName = currentTitle + '-' + chatID + '-' + timeStr;
+
+    return imageName;
 }
 
 function getImageOriRawUrl(imageUrl) {
