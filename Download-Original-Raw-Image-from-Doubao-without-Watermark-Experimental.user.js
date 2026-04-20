@@ -166,21 +166,26 @@ function createModifiedXHR() {
 
                         messages.forEach((message, i) => {
 
-                            if (message.user_type == 2 && Object.hasOwn(message, 'content') && message.content) {
-                                let content = JSON.parse(message.content);
+                            if (message.user_type == 2 && Object.hasOwn(message, 'content_block') && message.content_block) {
+                                let content_block = message.content_block;
 
-                                if (Array.isArray(content)) {
-                                    let creations = content[1].content.creation_block.creations;
-                                    creations.forEach((item, j) => {
-                                        if (item.type == 1) {
-                                            window.globalImageBucket[item.image.key] = item.image;
-                                        } else if (item.type == 2) {
+                                if (Array.isArray(content_block)) {
+                                    if (content_block.length >= 2 && Object.hasOwn(content_block[1], 'content')  && Object.hasOwn(content_block[1].content, 'creation_block') && Object.hasOwn(content_block[1].content.creation_block, 'creations')) {
 
-                                        } else {
-                                            console.log('item.type unknown. item.type ==' + item.type);
-                                        }
-                                    });
+                                        let creations = content_block[1].content.creation_block.creations;
+                                        creations.forEach((item, j) => {
+                                            if (item.type == 1) {
+                                                window.globalImageBucket[item.image.key] = item.image;
+                                            } else if (item.type == 2) {
+                                            } else {
+                                                console.log('item.type unknown. item.type ==' + item.type);
+                                            }
+                                        });
 
+                                    } else {
+                                        console.log('something wrong about content_block');
+                                        console.log(content_block);
+                                    }
                                 } else if (Object.hasOwn(content, 'image_list')) {
                                     let imageList = content.image_list;
                                     imageList.forEach((image, j) => {
@@ -192,7 +197,7 @@ function createModifiedXHR() {
                                 }
 
                             } else {
-
+                                console.log('message does not match');
                             }
 
                         });
