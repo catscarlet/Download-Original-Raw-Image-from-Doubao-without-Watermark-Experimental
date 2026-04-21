@@ -2,6 +2,15 @@
 
 (from new to old)
 
+## 0.0.4
+
+- **Rewrite function createModifiedXHR()** and match up doubao update.
+- Change class-flag to make compatible with other userscript
+- Increase the threshold from 300 to 750 to reduce system load.
+- New Feature: centerImageEditorButtonPanel
+- Fix wrong English name in title
+- Minor bug fixes.
+
 ## 0.0.3
 
 - Update image url to match doubao update
