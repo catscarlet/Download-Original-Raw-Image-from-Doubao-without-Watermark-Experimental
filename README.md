@@ -4,6 +4,8 @@
 
 **重要提示**：此脚本可能随 _[豆包（www.doubao.com）](https://www.doubao.com)_ 网站的更新而失效。
 
+注意：豆包网页端采用 **灰度发布** ，同一时间有约2种不同版本的网页端。如果你的网页端未升级，请使用上一个可用的版本，而非最新版。
+
 这是一个可以让你从 _[豆包（www.doubao.com）](https://www.doubao.com)_ 直接下载无水印图片 的 userscript 。
 
 * * *
@@ -34,7 +36,7 @@
 
 在完成安装用户脚本管理器后，安装本用户脚本。以下提供两种安装渠道：
 
--   Greasyfork脚本安装地址：<https://greasyfork.org/scripts/555118>，点击页面上的 _安装此脚本_ 即可
+- 【推荐】Greasyfork脚本安装地址：<https://greasyfork.org/scripts/555118>，点击页面上的 _安装此脚本_ 即可
 -   如果您访问 greasyfork.org 有困难，可以尝试这个 [GitHub链接](https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental/raw/refs/heads/main/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental.user.js) 进行安装
 
 ### 兼容性

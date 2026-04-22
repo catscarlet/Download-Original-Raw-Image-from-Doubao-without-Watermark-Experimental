@@ -2,6 +2,14 @@
 
 (from new to old)
 
+## 0.0.5
+
+The web version of doubao has changed its structure and logic.
+
+**Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
+
+- Update querySelector to match doubao update.
+
 ## 0.0.4
 
 - **Rewrite function createModifiedXHR()** and match up doubao update.
