@@ -47,14 +47,12 @@ window.globalImageBucket = {};
                         }
 
                         let images = [];
-                        //const imagesOldVersion = document.querySelectorAll('img.preview-img-IlQuCi.img-bg-fz6Iim');
-                        const imagesNewVersion = document.querySelectorAll('div.img-preview-container-aIXnUl');
+                        const imagesOldVersion = document.querySelectorAll('div.img-preview-container-aIXnUl');
+                        const imagesNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
 
-                        /*
                         for (const imageValue of imagesOldVersion.values()) {
                             images.push(imageValue);
                         }
-                        */
 
                         for (const imageValue of imagesNewVersion.values()) {
                             images.push(imageValue);
@@ -226,8 +224,8 @@ async function getCrossOriginImage(link) {
     link.style.backgroundColor = 'grey';
 
     const imageNodelist = link.parentNode.querySelectorAll('img');
-    const imageUrl = Array.from(imageNodelist).find((element) => element.alt == 'preview').src;
-
+    //const imageUrl = Array.from(imageNodelist).find((element) => element.alt == 'preview').src;
+    const imageUrl = Array.from(imageNodelist).find((element) => element.style.getPropertyValue('visibility') != '').src;
     const imageUrlV2 = getImageOriRawUrl(imageUrl);
 
     if (imageUrlV2 === false) {
@@ -327,7 +325,6 @@ function addAndChangeStyles() {
         const cssRule = `.left-top-w75xeC {
             justify-content: center !important;
         }`;
-
 
         style.appendChild(document.createTextNode(cssRule));
 
