@@ -24,12 +24,14 @@ window.globalImageBucket = {};
 
     let throttleTimer;
     let debounceTimer;
+    const thresholdValue = 750;
+
     addAndChangeStyles();
 
     const observer = new MutationObserver((mutationsList) => {
         const now = Date.now();
 
-        if (!throttleTimer || now - throttleTimer > 750) {
+        if (!throttleTimer || now - throttleTimer > thresholdValue) {
             throttleTimer = now;
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
@@ -117,7 +119,7 @@ window.globalImageBucket = {};
                         });
                     }
                 }
-            }, 750);
+            }, thresholdValue);
         }
     });
 
