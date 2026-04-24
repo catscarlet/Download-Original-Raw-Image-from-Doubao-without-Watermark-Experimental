@@ -65,6 +65,10 @@ window.globalImageBucket = {};
                         }
 
                         images.forEach((image) => {
+                            if (image.querySelector('img') == null) {
+                                //console.log('image target does not include <img>, not a image target.');
+                                return;
+                            }
 
                             if (!image.parentNode.querySelector('.imagelink-nowatermark-555118')) {
 
