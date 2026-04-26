@@ -71,51 +71,7 @@ window.globalImageBucket = {};
                             }
 
                             if (!image.parentNode.querySelector('.imagelink-nowatermark-555118')) {
-
-                                const link = document.createElement('a');
-
-                                link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印原图';
-                                link.style.whiteSpace = 'break-spaces';
-
-                                link.classList.add('imagelink-nowatermark-555118');
-
-                                link.style.position = 'absolute';
-                                link.style.backgroundColor = 'darkviolet';
-                                link.style.color = 'white';
-                                link.style.padding = '7px 14px';
-                                link.style.border = 'none';
-                                link.style.borderRadius = '5px';
-
-                                link.style.zIndex = 1;
-                                link.style.textDecoration = 'none';
-                                link.style.opacity = '0.8';
-
-                                const x = 0;
-                                const y = 0;
-
-                                link.style.left = x + 'px';
-                                link.style.top = y + 'px';
-
-                                link.addEventListener('mouseover', function() {
-                                    if (this.style.cursor == 'not-allowed') {
-                                        return;
-                                    }
-                                    this.style.backgroundColor = 'violet';
-                                    this.style.cursor = 'pointer';
-                                });
-
-                                link.addEventListener('mouseout', function() {
-                                    if (this.style.cursor == 'not-allowed') {
-                                        return;
-                                    }
-                                    this.style.backgroundColor = 'darkviolet';
-                                    this.style.cursor = '';
-                                });
-
-                                link.addEventListener('click', async () => {
-                                    getCrossOriginImage(link);
-                                });
-
+                                const link = createRawImageDownloadButton();
                                 image.parentNode.appendChild(link);
                             } else {
                                 //console.log('added, skip.');
@@ -219,6 +175,54 @@ function createModifiedXHR() {
     };
 
     return xhr;
+}
+
+function createRawImageDownloadButton() {
+    const link = document.createElement('a');
+
+    link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印原图';
+    link.style.whiteSpace = 'break-spaces';
+
+    link.classList.add('imagelink-nowatermark-555118');
+
+    link.style.position = 'absolute';
+    link.style.backgroundColor = 'darkviolet';
+    link.style.color = 'white';
+    link.style.padding = '7px 14px';
+    link.style.border = 'none';
+    link.style.borderRadius = '5px';
+
+    link.style.zIndex = 1;
+    link.style.textDecoration = 'none';
+    link.style.opacity = '0.8';
+
+    const x = 0;
+    const y = 0;
+
+    link.style.left = x + 'px';
+    link.style.top = 'calc(2em + 7px)';
+
+    link.addEventListener('mouseover', function() {
+        if (this.style.cursor == 'not-allowed') {
+            return;
+        }
+        this.style.backgroundColor = 'violet';
+        this.style.cursor = 'pointer';
+    });
+
+    link.addEventListener('mouseout', function() {
+        if (this.style.cursor == 'not-allowed') {
+            return;
+        }
+        this.style.backgroundColor = 'darkviolet';
+        this.style.cursor = '';
+    });
+
+    link.addEventListener('click', async () => {
+        getCrossOriginImage(link);
+    });
+
+    return link;
 }
 
 async function getCrossOriginImage(link) {
