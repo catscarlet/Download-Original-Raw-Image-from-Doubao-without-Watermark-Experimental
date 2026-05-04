@@ -13,7 +13,6 @@
 // ==/UserScript==
 
 const removeDefaultDownloadButton = 0; //Set 1 to hide Original Download Button.
-const centerImageEditorButtonPanel = 0; //Center the Image Editor Button Panel so when using the DefaultDownloadButton, the toast won't block buttons. Default is OFF. Set centerImageEditorButtonPanel to 1 to disable it.
 
 const customPostfixName = '';
 const OriginalXHR = window.XMLHttpRequest;
@@ -25,8 +24,6 @@ window.globalImageBucket = {};
     let throttleTimer;
     let debounceTimer;
     const thresholdValue = 750;
-
-    addAndChangeStyles();
 
     const observer = new MutationObserver((mutationsList) => {
         const now = Date.now();
@@ -324,21 +321,4 @@ function getYmdHMS() {
     const result = `${Y}${m}${d}${H}${M}${S}`;
 
     return result;
-}
-
-function addAndChangeStyles() {
-
-    if (centerImageEditorButtonPanel == 1) {
-        const style = document.createElement('style');
-        style.type = 'text/css';
-
-        const cssRule = `.left-top-w75xeC {
-            justify-content: center !important;
-        }`;
-
-        style.appendChild(document.createTextNode(cssRule));
-
-        const head = document.head || document.documentElement;
-        head.appendChild(style);
-    }
 }
