@@ -116,7 +116,6 @@ function createModifiedXHR() {
                 if (xhr.readyState === 4) {
 
                     const jsonData = JSON.parse(xhr.responseText);
-                    window.result = jsonData;
 
                     if (Object.hasOwn(jsonData, 'downlink_body')) {
                         let messages = jsonData.downlink_body.pull_singe_chain_downlink_body.messages;
