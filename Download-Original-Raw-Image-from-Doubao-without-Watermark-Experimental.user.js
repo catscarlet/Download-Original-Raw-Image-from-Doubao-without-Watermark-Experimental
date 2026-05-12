@@ -67,7 +67,7 @@ window.globalImageBucket = {};
                                 return;
                             }
 
-                            if (!image.parentNode.querySelector('.imagelink-nowatermark-555118')) {
+                            if (!image.parentNode.querySelector('.doubao-nowatermark-555118')) {
                                 const link = createRawImageDownloadButton();
                                 image.parentNode.appendChild(link);
                             } else {
@@ -179,7 +179,7 @@ function createRawImageDownloadButton() {
     link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印原图';
     link.style.whiteSpace = 'break-spaces';
 
-    link.classList.add('imagelink-nowatermark-555118');
+    link.classList.add('doubao-nowatermark-555118');
 
     link.style.position = 'absolute';
     link.style.backgroundColor = 'darkviolet';
