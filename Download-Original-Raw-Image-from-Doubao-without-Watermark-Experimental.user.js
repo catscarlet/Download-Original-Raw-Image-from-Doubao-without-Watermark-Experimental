@@ -17,6 +17,8 @@ const removeDefaultDownloadButton = 0; //Set 1 to hide Original Download Button.
 const customPostfixName = '';
 const OriginalXHR = window.XMLHttpRequest;
 window.globalImageBucket = {};
+window.globalVideoBucket = {};
+window.globalVideoKeyValveBucket = {};
 
 (function() {
     'use strict';
@@ -46,8 +48,11 @@ window.globalImageBucket = {};
                         }
 
                         let images = [];
+                        let videos = [];
+
                         const imagesOldVersion = document.querySelectorAll('div.img-preview-container-aIXnUl');
                         const imagesNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
+                        const videosNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
 
                         for (const imageValue of imagesOldVersion.values()) {
                             images.push(imageValue);
@@ -57,22 +62,39 @@ window.globalImageBucket = {};
                             images.push(imageValue);
                         }
 
-                        if (images.length == 0) {
+                        for (const videoValue of videosNewVersion.values()) {
+                            videos.push(videoValue);
+                        }
+
+                        if (images.length == 0 && videos.length == 0) {
                             return false;
                         }
 
                         images.forEach((image) => {
-                            if (image.querySelector('img') == null) {
-                                //console.log('image target does not include <img>, not a image target.');
+                            if (image.parentNode.querySelector('.doubao-nowatermark-555118')) {
                                 return;
                             }
 
-                            if (!image.parentNode.querySelector('.doubao-nowatermark-555118')) {
-                                const link = createRawImageDownloadButton();
-                                image.parentNode.appendChild(link);
-                            } else {
-                                //console.log('added, skip.');
+                            if (image.querySelector('img') == null) {
+                                return;
                             }
+
+                            const link = createRawImageDownloadButton();
+                            image.parentNode.appendChild(link);
+
+                        });
+
+                        videos.forEach((video) => {
+                            if (video.parentNode.querySelector('.doubao-nowatermark-555118')) {
+                                return;
+                            }
+
+                            if (video.querySelector('video') == null) {
+                                return;
+                            }
+
+                            const links = createVideoDownloadButtons(video);
+                            video.parentNode.appendChild(links);
                         });
                     }
                 }
@@ -133,14 +155,16 @@ function createModifiedXHR() {
                                             if (item.type == 1) {
                                                 window.globalImageBucket[item.image.key] = item.image;
                                             } else if (item.type == 2) {
+                                                let vid = item.video.vid;
+                                                window.globalVideoBucket[vid] = item.video;
                                             } else {
-                                                console.log('item.type unknown. item.type ==' + item.type);
+                                                //console.log('item.type unknown. item.type ==' + item.type);
                                             }
                                         });
 
                                     } else {
-                                        console.log('something wrong about content_block');
-                                        console.log(content_block);
+                                        //console.log('something wrong about content_block');
+                                        //console.log(content_block);
                                     }
                                 } else if (Object.hasOwn(content, 'image_list')) {
                                     let imageList = content.image_list;
@@ -153,7 +177,7 @@ function createModifiedXHR() {
                                 }
 
                             } else {
-                                console.log('message does not match');
+                                //console.log('message does not match');
                             }
 
                         });
@@ -163,6 +187,21 @@ function createModifiedXHR() {
                     }
 
 
+                }
+            });
+        } else if (this._method && this._method.toUpperCase() === 'POST' &&
+            this._url && this._url.includes('/samantha/video/get_play_info?')) {
+
+            xhr.addEventListener('load', function() {
+                if (xhr.readyState === 4) {
+
+                    const thisRequestDataRaw = this._data;
+                    const thisRequestData = JSON.parse(thisRequestDataRaw);
+                    const vid = thisRequestData.vid;
+                    const jsonData = JSON.parse(xhr.responseText);
+                    const main = jsonData.data.play_infos[0].main;
+                    const urlKey = getKeyFromUrl(main);
+                    window.globalVideoKeyValveBucket[urlKey] = vid;
                 }
             });
         }
@@ -216,6 +255,65 @@ function createRawImageDownloadButton() {
 
     link.addEventListener('click', async () => {
         getCrossOriginImage(link);
+    });
+
+    return link;
+}
+
+function createVideoDownloadButtons(video) {
+    const videoTarget = video.querySelector('video');
+    const videoUrl = videoTarget.src;
+    const urlKey = getKeyFromUrl(videoUrl);
+    const vid = window.globalVideoKeyValveBucket[urlKey];
+
+    const links = document.createElement('div');
+    links.style.position = 'absolute';
+    const x = 0;
+    const y = 0;
+    links.style.left = x + 'px';
+    links.style.top = 'calc(2em + 7px)';
+
+    let main_url = getUrlByVid(vid);
+    let b = createOneVideoDownloadButton(vid, main_url);
+    links.appendChild(b);
+    return links;
+}
+
+function createOneVideoDownloadButton(k, v) {
+    const link = document.createElement('a');
+    link.k = k;
+    link.v = v;
+    link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印视频';
+    link.style.whiteSpace = 'break-spaces';
+    link.classList.add('doubao-nowatermark-555118');
+    link.style.backgroundColor = 'darkviolet';
+    link.style.color = 'white';
+    link.style.padding = '7px 14px';
+    link.style.border = 'none';
+    link.style.borderRadius = '5px';
+    link.style.zIndex = 1;
+    link.style.textDecoration = 'none';
+    link.style.opacity = '0.8';
+    link.style.display = 'block';
+
+    link.addEventListener('mouseover', function() {
+        if (this.style.cursor == 'not-allowed') {
+            return;
+        }
+        this.style.backgroundColor = 'violet';
+        this.style.cursor = 'pointer';
+    });
+
+    link.addEventListener('mouseout', function() {
+        if (this.style.cursor == 'not-allowed') {
+            return;
+        }
+        this.style.backgroundColor = 'darkviolet';
+        this.style.cursor = '';
+    });
+
+    link.addEventListener('click', async () => {
+        getCrossOriginVideo(link);
     });
 
     return link;
@@ -275,6 +373,54 @@ async function getCrossOriginImage(link) {
 
 }
 
+async function getCrossOriginVideo(link) {
+    const btnOriginStyle = {};
+    btnOriginStyle.cursor = link.style.cursor;
+    btnOriginStyle.backgroundColor = link.style.backgroundColor;
+    link.style.cursor = 'not-allowed';
+    link.style.backgroundColor = 'grey';
+
+    let videoUrl = await link.v;
+
+    let videoName = getVideoName(link);
+    if (customPostfixName) {
+        videoName = videoName + '-' + customPostfixName;
+    }
+    videoName = videoName + '.mp4';
+
+    if (!videoUrl) {
+        console.error('抱歉，获取视频播放信息失败');
+        alert('抱歉，获取视频播放信息失败');
+    }
+
+    try {
+        const response = await fetch(videoUrl, {mode: 'cors', referrer: ''});
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = videoName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        setTimeout(() => {
+            a.click();
+        }, 10);
+        setTimeout(() => {
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            link.style.cursor = btnOriginStyle.cursor;
+            link.style.backgroundColor = btnOriginStyle.backgroundColor;
+        }, 1000);
+
+    } catch (error) {
+        console.error('加载失败，请确保服务器开启了 CORS 支持。');
+        alert('加载失败，请确保服务器开启了 CORS 支持。');
+        link.style.cursor = btnOriginStyle.cursor;
+        link.style.backgroundColor = btnOriginStyle.backgroundColor;
+    }
+
+}
+
 function getImageName() {
     const currentTitle = document.title.replace('- 豆包', '').trim();
     const chatID = document.location.pathname.replace('/chat/', '').trim();
@@ -283,6 +429,16 @@ function getImageName() {
     const imageName = currentTitle + '-' + chatID + '-' + timeStr;
 
     return imageName;
+}
+
+function getVideoName(link) {
+    const currentTitle = document.title.replace('- 豆包', '').trim();
+    const chatID = document.location.pathname.replace('/chat/', '').trim();
+    const timeStr = getYmdHMS();
+
+    const videoName = currentTitle + '-' + chatID + '-' + '-' + timeStr;
+
+    return videoName;
 }
 
 function getImageOriRawUrl(imageUrl) {
@@ -320,4 +476,44 @@ function getYmdHMS() {
     const result = `${Y}${m}${d}${H}${M}${S}`;
 
     return result;
+}
+
+function getKeyFromUrl(url) {
+    const UrlObj = new URL(url);
+    const urlKey = UrlObj.pathname;
+
+    return urlKey;
+}
+
+async function getUrlByVid(vid) {
+    const url = 'https://www.doubao.com/samantha/media/get_play_info?version_code=20800&language=zh-CN&device_platform=web&aid=497858&real_aid=497858&pkg_type=release_version&device_id=&pc_version=2.51.7&region=&sys_region=&samantha_web=1&use-olympus-account=1&web_tab_id=';
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'origin': 'https://www.doubao.com',
+            },
+            body: JSON.stringify({key: vid}),
+        });
+
+        let result = await response.json();
+
+        if (!result || !result.data) {
+            console.log('API failed');
+            console.log(result);
+
+            return false;
+        }
+
+        let main_url = await result.data.original_media_info.main_url;
+
+        return main_url;
+    } catch (e) {
+        console.error('获取视频播放信息失败:', e);
+
+        return null;
+    }
 }
