@@ -50,13 +50,9 @@ window.globalVideoKeyValveBucket = {};
                         let images = [];
                         let videos = [];
 
-                        const imagesOldVersion = document.querySelectorAll('div.img-preview-container-aIXnUl');
                         const imagesNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
                         const videosNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
 
-                        for (const imageValue of imagesOldVersion.values()) {
-                            images.push(imageValue);
-                        }
 
                         for (const imageValue of imagesNewVersion.values()) {
                             images.push(imageValue);
@@ -75,7 +71,7 @@ window.globalVideoKeyValveBucket = {};
                                 return;
                             }
 
-                            if (image.querySelector('img') == null) {
+                            if (image.querySelector('canvas') == null) {
                                 return;
                             }
 
@@ -114,6 +110,7 @@ window.globalVideoKeyValveBucket = {};
         return createModifiedXHR();
     };
 
+    setCanvasDataset();
 })();
 
 function createModifiedXHR() {
@@ -153,7 +150,8 @@ function createModifiedXHR() {
                                         let creations = content_block[1].content.creation_block.creations;
                                         creations.forEach((item, j) => {
                                             if (item.type == 1) {
-                                                window.globalImageBucket[item.image.key] = item.image;
+                                                const imageKey = getKeyFromUrl(item.image.image_preview.url);
+                                                window.globalImageBucket[imageKey] = item.image;
                                             } else if (item.type == 2) {
                                                 let vid = item.video.vid;
                                                 window.globalVideoBucket[vid] = item.video;
@@ -210,6 +208,17 @@ function createModifiedXHR() {
     };
 
     return xhr;
+}
+
+function setCanvasDataset() {
+    const originalCanvasRenderingContext2D = CanvasRenderingContext2D.prototype.drawImage;
+    CanvasRenderingContext2D.prototype.drawImage = function(img, ...args) {
+        const targetCanvas = this.canvas;
+        const src = img && (img.currentSrc || img.src) || (img && img.toDataURL && '[canvas/image source]');
+        targetCanvas.dataset.src = src;
+
+        return originalCanvasRenderingContext2D.call(this, img, ...args);
+    };
 }
 
 function createRawImageDownloadButton() {
@@ -327,10 +336,9 @@ async function getCrossOriginImage(link) {
     link.style.cursor = 'not-allowed';
     link.style.backgroundColor = 'grey';
 
-    const imageNodelist = link.parentNode.querySelectorAll('img');
-    //const imageUrl = Array.from(imageNodelist).find((element) => element.alt == 'preview').src;
-    const imageUrl = Array.from(imageNodelist).find((element) => element.style.getPropertyValue('visibility') != '').src;
-    const imageUrlV2 = getImageOriRawUrl(imageUrl);
+    const imageNode = link.parentNode.querySelector('canvas');
+    const imageKey = getKeyFromUrl(imageNode.dataset.src);
+    const imageUrlV2 = getImageOriRawUrlByImageKey(imageKey);
 
     if (imageUrlV2 === false) {
         console.error('抱歉，不支持这张图片的无水印原图下载。');
@@ -343,7 +351,7 @@ async function getCrossOriginImage(link) {
     if (customPostfixName) {
         imageName = imageName + '-' + customPostfixName;
     }
-    imageName = imageName + '-原图.png';
+    imageName = imageName + '-无水印原图.png';
 
     try {
         const response = await fetch(imageUrlV2, {mode: 'cors'});
@@ -441,27 +449,22 @@ function getVideoName(link) {
     return videoName;
 }
 
-function getImageOriRawUrl(imageUrl) {
-    const url = new URL(imageUrl);
-    let pathAndQuery = url.pathname + url.search + url.hash;
+function getImageOriRawUrlByImageKey(ImageKey) {
+    if (Object.hasOwn(window.globalImageBucket, ImageKey)) {
+        if (window.globalImageBucket[ImageKey] != undefined) {
+            const image_ori_raw = window.globalImageBucket[ImageKey].image_ori_raw.url;
 
-    const postfixIndex = pathAndQuery.indexOf('.jpeg~tplv');
+            return image_ori_raw;
+        } else {
+            console.log('image_ori_raw not found in window.globalImageBucket.' + ImageKey);
 
-    if (postfixIndex !== -1) {
-        pathAndQuery = pathAndQuery.substring(0, postfixIndex);
-        pathAndQuery = pathAndQuery.substring(1);
-        pathAndQuery = pathAndQuery + '.jpeg';
-    }
-
-    if (Object.hasOwn(window.globalImageBucket, pathAndQuery) & window.globalImageBucket[pathAndQuery] != undefined) {
-        const image_ori_raw = window.globalImageBucket[pathAndQuery].image_ori_raw.url;
-        return image_ori_raw;
+            return false;
+        }
     } else {
-        console.log('image_ori_raw not found in globalImageBucket');
+        console.log('ImageKey not found in globalImageBucket');
 
         return false;
     }
-
 }
 
 function getYmdHMS() {
