@@ -1,4 +1,4 @@
-# 从豆包下载无水印原图实验版 Download Original Raw Image from doubao.com without Watermark Experimental
+# 从豆包下载无水印原图和无水印视频实验版 Download Raw Image and Raw Video from doubao.com without Watermark Experimental
 
 **重要提示**： **本脚本为学习实验性质。功能可靠性不高。个人目前精力有限，不会把重心放在这个脚本上。源码已提供，您可自行调整代码内容，请遵守 AGPLv3 开源协议。**
 
@@ -12,9 +12,17 @@
 
 ## 截图
 
+### 无水印图片下载
+
 ![snap1.jpg](snap1.jpg)
 
 ![snap2.jpg](snap2.jpg)
+
+### 无水印视频下载
+
+![snap3.jpg](snap3.jpg)
+
+![snap4.jpg](snap4.jpg)
 
 ## 使用说明
 
@@ -69,6 +77,7 @@
 -   使用 智能编辑、区域重绘、扩图、擦除、变清晰 等编辑功能生成的图片无法下载。
 -   在会话中新生成的的图片需要在页面刷新后才能下载。
 -   部分会话的图片无法下载。
+-   （20260601）版本0.1.0后有时会出现无法下载的情况，刷新可以解决。
 
 本项目欢迎你提供代码修复这些问题。
 

@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name            从豆包下载无水印原图实验版 Download Original Raw Image from doubao.com without Watermark Experimental
-// @name:en         Download Original Raw Image from doubao.com without Watermark Experimental 从豆包下载无水印原图实验版
+// @name            从豆包下载无水印原图和无水印视频实验版 Download Raw Image and Raw Video from doubao.com without Watermark Experimental
+// @name:en         Download Raw Image and Raw Video from doubao.com without Watermark Experimental 从豆包下载无水印原图和无水印视频实验版
 // @namespace       https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental
-// @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图 You can try this userscript to Download Original Raw Image from doubao.com without Watermark.
-// @description:en  You can try this userscript to Download Original Raw Image from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图
-// @version         0.0.5
+// @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频 You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark.
+// @description:en  You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频
+// @version         0.1.0
 // @author          catscarlet
 // @license         GNU Affero General Public License v3.0
 // @match           https://www.doubao.com/chat/*
@@ -89,7 +89,7 @@ window.globalVideoKeyValveBucket = {};
                                 return;
                             }
 
-                            const links = createVideoDownloadButtons(video);
+                            const links = createRawVideoDownloadButtons(video);
                             video.parentNode.appendChild(links);
                         });
                     }
@@ -215,7 +215,7 @@ function setCanvasDataset() {
     CanvasRenderingContext2D.prototype.drawImage = function(img, ...args) {
         const targetCanvas = this.canvas;
         const src = img && (img.currentSrc || img.src) || (img && img.toDataURL && '[canvas/image source]');
-        targetCanvas.dataset.src = src;
+        targetCanvas.dataset['src-555118'] = src;
 
         return originalCanvasRenderingContext2D.call(this, img, ...args);
     };
@@ -269,7 +269,7 @@ function createRawImageDownloadButton() {
     return link;
 }
 
-function createVideoDownloadButtons(video) {
+function createRawVideoDownloadButtons(video) {
     const videoTarget = video.querySelector('video');
     const videoUrl = videoTarget.src;
     const urlKey = getKeyFromUrl(videoUrl);
@@ -283,12 +283,12 @@ function createVideoDownloadButtons(video) {
     links.style.top = 'calc(2em + 7px)';
 
     let main_url = getUrlByVid(vid);
-    let b = createOneVideoDownloadButton(vid, main_url);
+    let b = createOneRawVideoDownloadButton(vid, main_url);
     links.appendChild(b);
     return links;
 }
 
-function createOneVideoDownloadButton(k, v) {
+function createOneRawVideoDownloadButton(k, v) {
     const link = document.createElement('a');
     link.k = k;
     link.v = v;
@@ -337,7 +337,7 @@ async function getCrossOriginImage(link) {
     link.style.backgroundColor = 'grey';
 
     const imageNode = link.parentNode.querySelector('canvas');
-    const imageKey = getKeyFromUrl(imageNode.dataset.src);
+    const imageKey = getKeyFromUrl(imageNode.dataset['src-555118']);
     const imageUrlV2 = getImageOriRawUrlByImageKey(imageKey);
 
     if (imageUrlV2 === false) {
@@ -394,7 +394,7 @@ async function getCrossOriginVideo(link) {
     if (customPostfixName) {
         videoName = videoName + '-' + customPostfixName;
     }
-    videoName = videoName + '.mp4';
+    videoName = videoName + '-无水印.mp4';
 
     if (!videoUrl) {
         console.error('抱歉，获取视频播放信息失败');
@@ -444,7 +444,7 @@ function getVideoName(link) {
     const chatID = document.location.pathname.replace('/chat/', '').trim();
     const timeStr = getYmdHMS();
 
-    const videoName = currentTitle + '-' + chatID + '-' + '-' + timeStr;
+    const videoName = currentTitle + '-' + chatID + '-' + timeStr;
 
     return videoName;
 }
