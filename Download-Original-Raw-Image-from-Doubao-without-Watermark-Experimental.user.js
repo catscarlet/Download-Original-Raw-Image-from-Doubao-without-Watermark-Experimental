@@ -47,50 +47,35 @@ window.globalVideoKeyValveBucket = {};
                             });
                         }
 
-                        let images = [];
-                        let videos = [];
+                        let itemContainer = [];
+                        let itemItem = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
 
-                        const imagesNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
-                        const videosNewVersion = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
-
-
-                        for (const imageValue of imagesNewVersion.values()) {
-                            images.push(imageValue);
+                        for (const itemValue of itemItem.values()) {
+                            itemContainer.push(itemValue);
                         }
 
-                        for (const videoValue of videosNewVersion.values()) {
-                            videos.push(videoValue);
-                        }
-
-                        if (images.length == 0 && videos.length == 0) {
+                        if (itemContainer.length == 0) {
                             return false;
                         }
 
-                        images.forEach((image) => {
-                            if (image.parentNode.querySelector('.doubao-nowatermark-555118')) {
+                        itemContainer.forEach((itemInContainer) => {
+                            if (itemInContainer.parentNode.querySelector('.doubao-nowatermark-555118')) {
                                 return;
                             }
 
-                            if (image.querySelector('canvas') == null) {
+                            if (itemInContainer.querySelector('canvas')) {
+                                const link = createRawImageDownloadButton();
+                                itemInContainer.parentNode.appendChild(link);
+
                                 return;
                             }
 
-                            const link = createRawImageDownloadButton();
-                            image.parentNode.appendChild(link);
+                            if (itemInContainer.querySelector('video')) {
+                                const links = createRawVideoDownloadButtons(itemInContainer);
+                                itemInContainer.parentNode.appendChild(links);
 
-                        });
-
-                        videos.forEach((video) => {
-                            if (video.parentNode.querySelector('.doubao-nowatermark-555118')) {
                                 return;
                             }
-
-                            if (video.querySelector('video') == null) {
-                                return;
-                            }
-
-                            const links = createRawVideoDownloadButtons(video);
-                            video.parentNode.appendChild(links);
                         });
                     }
                 }
@@ -192,7 +177,6 @@ function createModifiedXHR() {
 
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
-
                     const thisRequestDataRaw = this._data;
                     const thisRequestData = JSON.parse(thisRequestDataRaw);
                     const vid = thisRequestData.vid;
