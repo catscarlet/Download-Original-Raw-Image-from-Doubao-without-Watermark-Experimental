@@ -12,8 +12,6 @@
 // @grant           none
 // ==/UserScript==
 
-const removeDefaultDownloadButton = 0; //Set 1 to hide Original Download Button.
-
 const customPostfixName = '';
 const OriginalXHR = window.XMLHttpRequest;
 window.globalImageBucket = {};
@@ -36,16 +34,6 @@ window.globalVideoKeyValveBucket = {};
             debounceTimer = setTimeout(() => {
                 for (const mutation of mutationsList) {
                     if (mutation.type === 'childList') {
-
-                        if (removeDefaultDownloadButton) {
-                            const EditImageDownloadButtons = document.querySelectorAll('div[data-testid="edit_image_download_button"]');
-
-                            EditImageDownloadButtons.forEach((EditImageDownloadButton) => {
-                                if (EditImageDownloadButton && EditImageDownloadButton.style.display != 'none') {
-                                    EditImageDownloadButton.style.display = 'none';
-                                }
-                            });
-                        }
 
                         let itemContainer = [];
                         let itemItem = document.querySelectorAll('div.relative.flex.h-full.w-full.items-center.justify-center.overflow-hidden');
