@@ -123,6 +123,9 @@ function createModifiedXHR() {
                                         let creations = content_block[1].content.creation_block.creations;
                                         creations.forEach((item, j) => {
                                             if (item.type == 1) {
+                                                if (!item.image.key) {
+                                                    return false;
+                                                }
                                                 const imageKey = getKeyFromUrl(item.image.image_preview.url);
                                                 window.globalImageBucket[imageKey] = item.image;
                                             } else if (item.type == 2) {
