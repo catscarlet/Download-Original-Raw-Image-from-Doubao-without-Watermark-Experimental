@@ -4,6 +4,12 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.1.1
+
+- Fix fails when there is failed generating in conversation.
+- Rewrite Selector
+- Remove obsoleted code
+
 ## 0.1.0
 
 - **Support downloading video without watermark Now!**
@@ -13,7 +19,7 @@
 Known issues:
 
 - There is a strange bug that the downloading may not work but reloading the page may fix it.
-- Also this version has strange conflicts to other userscript, like <https://greasyfork.org/scripts/527890>. If you having issue, try only enable only one at a time.
+- Also this version may have strange conflicts to other userscript, like <https://greasyfork.org/scripts/527890>. If you having issue, try only enable only one at a time.
 
 ## 0.0.5
 
