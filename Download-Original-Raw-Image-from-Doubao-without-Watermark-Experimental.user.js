@@ -225,7 +225,7 @@ function createRawImageDownloadButton() {
     link.style.top = 'calc(2em + 7px)';
 
     link.addEventListener('mouseover', function() {
-        if (this.style.cursor == 'not-allowed') {
+        if (this.style.cursor == 'wait') {
             return;
         }
         this.style.backgroundColor = 'violet';
@@ -233,7 +233,7 @@ function createRawImageDownloadButton() {
     });
 
     link.addEventListener('mouseout', function() {
-        if (this.style.cursor == 'not-allowed') {
+        if (this.style.cursor == 'wait') {
             return;
         }
         this.style.backgroundColor = 'darkviolet';
@@ -284,7 +284,7 @@ function createOneRawVideoDownloadButton(k, v) {
     link.style.display = 'block';
 
     link.addEventListener('mouseover', function() {
-        if (this.style.cursor == 'not-allowed') {
+        if (this.style.cursor == 'wait') {
             return;
         }
         this.style.backgroundColor = 'violet';
@@ -292,7 +292,7 @@ function createOneRawVideoDownloadButton(k, v) {
     });
 
     link.addEventListener('mouseout', function() {
-        if (this.style.cursor == 'not-allowed') {
+        if (this.style.cursor == 'wait') {
             return;
         }
         this.style.backgroundColor = 'darkviolet';
@@ -311,7 +311,7 @@ async function getCrossOriginImage(link) {
     const btnOriginStyle = {};
     btnOriginStyle.cursor = link.style.cursor;
     btnOriginStyle.backgroundColor = link.style.backgroundColor;
-    link.style.cursor = 'not-allowed';
+    link.style.cursor = 'wait';
     link.style.backgroundColor = 'grey';
 
     const imageNode = link.parentNode.querySelector('canvas');
@@ -363,7 +363,7 @@ async function getCrossOriginVideo(link) {
     const btnOriginStyle = {};
     btnOriginStyle.cursor = link.style.cursor;
     btnOriginStyle.backgroundColor = link.style.backgroundColor;
-    link.style.cursor = 'not-allowed';
+    link.style.cursor = 'wait';
     link.style.backgroundColor = 'grey';
 
     let videoUrl = await link.v;
