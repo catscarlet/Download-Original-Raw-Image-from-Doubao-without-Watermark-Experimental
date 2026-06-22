@@ -263,18 +263,19 @@ function createRawVideoDownloadButtons(video) {
     links.style.top = 'calc(2em + 7px)';
 
     let main_url = getUrlByVid(vid);
-    let b = createOneRawVideoDownloadButton(vid, main_url);
+    let b = createOneRawVideoDownloadButton(vid);
     links.appendChild(b);
     return links;
 }
 
-function createOneRawVideoDownloadButton(k, v) {
+function createOneRawVideoDownloadButton(vid) {
     const link = document.createElement('a');
-    link.k = k;
-    link.v = v;
+    link.dataset.vid = vid;
     link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印视频';
     link.style.whiteSpace = 'break-spaces';
+
     link.classList.add('doubao-nowatermark-555118');
+
     link.style.backgroundColor = 'darkviolet';
     link.style.color = 'white';
     link.style.padding = '7px 14px';
@@ -368,9 +369,10 @@ async function getCrossOriginVideo(link) {
     link.style.cursor = 'wait';
     link.style.backgroundColor = 'grey';
 
-    let videoUrl = await link.v;
+    const vid = link.dataset.vid;
+    let videoUrl = await getUrlByVid(vid);
 
-    let videoName = getVideoName(link);
+    let videoName = getVideoName();
     if (customPostfixName) {
         videoName = videoName + '-' + customPostfixName;
     }
@@ -419,7 +421,7 @@ function getImageName() {
     return imageName;
 }
 
-function getVideoName(link) {
+function getVideoName() {
     const currentTitle = document.title.replace('- 豆包', '').trim();
     const chatID = document.location.pathname.replace('/chat/', '').trim();
     const timeStr = getYmdHMS();
