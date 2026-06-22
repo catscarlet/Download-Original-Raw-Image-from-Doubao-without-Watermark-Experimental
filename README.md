@@ -44,9 +44,9 @@
 
 在完成安装用户脚本管理器后，安装本用户脚本。以下提供几个安装渠道：
 
-- 【推荐】Greasyfork脚本安装地址：<https://greasyfork.org/scripts/555118>，点击页面上的 _安装此脚本_ 即可
-- （Greasyfork镜像站）Greasyfork.icu脚本安装地址：<https://greasyfork.icu/zh-CN/scripts/555118>，点击页面上的 _安装此脚本_ 即可。
-- 如果您访问 greasyfork.org 有困难，可以尝试这个 [GitHub链接](https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental/raw/refs/heads/main/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental.user.js) 进行安装。注意这个链接指向的地址为本项目的仓库，对应的文件可能比 Greasyfork 要新且可能包含一些新功能和不稳定的更改。
+-   【推荐】Greasyfork脚本安装地址：<https://greasyfork.org/scripts/555118>，点击页面上的 _安装此脚本_ 即可
+-   （Greasyfork镜像站）Greasyfork.icu脚本安装地址：<https://greasyfork.icu/zh-CN/scripts/555118>，点击页面上的 _安装此脚本_ 即可。
+-   如果您访问 greasyfork.org 有困难，可以尝试这个 [GitHub链接](https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental/raw/refs/heads/main/Download-Original-Raw-Image-from-Doubao-without-Watermark-Experimental.user.js) 进行安装。注意这个链接指向的地址为本项目的仓库，对应的文件可能比 Greasyfork 要新且可能包含一些新功能和不稳定的更改。
 
 请注意：本脚本仅在 「Greasyfork 」与「GitHub」上进行发布和维护。对于镜像站可能产生的包括且不限于安全相关的问题概不负责。
 
@@ -54,16 +54,14 @@
 
 脚本可正确在以下用户脚本管理器中运行：
 
--   Tampermonkey: 5.4.0
+-   Tampermonkey: 5.5.0
+-   Tampermonkey Legacy (MV2): 5.1.1
 
 脚本可正确在以下浏览器中运行：
 
--   Firefox: 144.0.2
-
-以下浏览器暂未测试但估计可以正常使用：
-
-- Firefox ESR: 115.22.0esr (Win7 可用)
-- Chrome: 109.0.5414.120 (Win7 可用)
+-   Firefox: 152.0.1
+-   Firefox ESR: 115.37.0esr (Win7 可用)
+-   Chrome: 109.0.5414.120 (Win7 可用)(Chrome版本小于120需要使用 Tampermonkey Legacy)
 
 ### 使用
 
