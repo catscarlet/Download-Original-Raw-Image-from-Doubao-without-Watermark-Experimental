@@ -4,6 +4,13 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.1.2
+
+- Rewrite url query logic to prevent unnecessary request.
+- Fix an issue that may cause the downloading becomes a thumbnail instead of preview image.
+- Change Button Downloading style to 'wait' for better visual effect.
+- add zh meta.
+
 ## 0.1.1
 
 - Fix fails when there is failed generating in conversation.
