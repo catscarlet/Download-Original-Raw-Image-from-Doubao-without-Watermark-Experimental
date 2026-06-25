@@ -481,6 +481,7 @@ async function getUrlByVid(vid) {
                 'Content-Type': 'application/json',
                 'origin': 'https://www.doubao.com',
             },
+            referrer: null,
             body: JSON.stringify({key: vid}),
         });
 
