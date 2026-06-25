@@ -120,7 +120,7 @@ function createModifiedXHR() {
                                 let content_block = message.content_block;
 
                                 if (Array.isArray(content_block)) {
-                                    if (content_block.length >= 2 && Object.hasOwn(content_block[1], 'content')  && Object.hasOwn(content_block[1].content, 'creation_block') && Object.hasOwn(content_block[1].content.creation_block, 'creations')) {
+                                    if (content_block.length >= 2 && Object.hasOwn(content_block[1], 'content') && Object.hasOwn(content_block[1].content, 'creation_block') && Object.hasOwn(content_block[1].content.creation_block, 'creations')) {
 
                                         let creations = content_block[1].content.creation_block.creations;
                                         creations.forEach((item, j) => {
@@ -138,16 +138,7 @@ function createModifiedXHR() {
                                             }
                                         });
 
-                                    } else {
-                                        //console.log('something wrong about content_block');
-                                        //console.log(content_block);
                                     }
-                                } else if (Object.hasOwn(content, 'image_list')) {
-                                    let imageList = content.image_list;
-                                    imageList.forEach((image, j) => {
-                                        window.globalImageBucket[image.key] = image.image;
-                                    });
-
                                 } else {
                                     console.log(content);
                                 }
