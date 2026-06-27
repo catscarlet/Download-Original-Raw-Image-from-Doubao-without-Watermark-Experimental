@@ -81,9 +81,7 @@ window.globalVideoKeyValveBucket = {};
 
     observer.observe(document.documentElement, config);
 
-    window.XMLHttpRequest = function() {
-        return createModifiedXHR();
-    };
+    window.XMLHttpRequest = createModifiedXHR;
 
     setCanvasDataset();
 })();
@@ -161,12 +159,12 @@ function createModifiedXHR() {
 
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
-                    const thisRequestDataRaw = this._data;
-                    const thisRequestData = JSON.parse(thisRequestDataRaw);
-                    const vid = thisRequestData.vid;
+                    const postDataRaw = JSON.parse(body);
+                    const vid = postDataRaw.vid;
                     const jsonData = JSON.parse(xhr.responseText);
                     const main = jsonData.data.play_infos[0].main;
                     const urlKey = getKeyFromUrl(main);
+
                     window.globalVideoKeyValveBucket[urlKey] = vid;
                 }
             });
