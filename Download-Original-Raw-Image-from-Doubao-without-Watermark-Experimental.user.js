@@ -138,7 +138,7 @@ function createModifiedXHR() {
 
                                     }
                                 } else {
-                                    console.log(content);
+                                    console.log(content_block);
                                 }
 
                             } else {
