@@ -129,8 +129,10 @@ function createModifiedXHR() {
                                                 const imageKey = getKeyFromUrl(item.image.image_preview.url);
                                                 window.globalImageBucket[imageKey] = item.image;
                                             } else if (item.type == 2) {
+                                                let reference_info = message.reference_info;
                                                 let vid = item.video.vid;
                                                 window.globalVideoBucket[vid] = item.video;
+                                                window.globalVideoBucket[vid].reference_info = reference_info;
                                             } else {
                                                 //console.log('item.type unknown. item.type ==' + item.type);
                                             }
@@ -251,9 +253,12 @@ function createRawVideoDownloadButtons(video) {
     links.style.left = x + 'px';
     links.style.top = 'calc(2em + 7px)';
 
-    let main_url = getUrlByVid(vid);
-    let b = createOneRawVideoDownloadButton(vid);
-    links.appendChild(b);
+    let rawVideoDownloadButton = createOneRawVideoDownloadButton(vid);
+    links.appendChild(rawVideoDownloadButton);
+
+    let rawPromptDownloadButton = createPromptDownloadButton(vid);
+    links.appendChild(rawPromptDownloadButton);
+
     return links;
 }
 
@@ -293,6 +298,48 @@ function createOneRawVideoDownloadButton(vid) {
 
     link.addEventListener('click', async () => {
         getCrossOriginVideo(link);
+    });
+
+    return link;
+}
+
+function createPromptDownloadButton(vid) {
+    const link = document.createElement('a');
+
+    link.dataset.vid = vid;
+
+    link.textContent = '点击将视频Prompt下载为TXT文档';
+    link.style.whiteSpace = 'break-spaces';
+
+    link.classList.add('doubao-nowatermark-555118');
+    link.style.backgroundColor = 'darkviolet';
+    link.style.color = 'white';
+    link.style.padding = '7px 14px';
+    link.style.border = 'none';
+    link.style.borderRadius = '5px';
+    link.style.zIndex = 1;
+    link.style.textDecoration = 'none';
+    link.style.opacity = '0.8';
+    link.style.display = 'block';
+
+    link.addEventListener('mouseover', function() {
+        if (this.style.cursor == 'wait') {
+            return;
+        }
+        this.style.backgroundColor = 'violet';
+        this.style.cursor = 'pointer';
+    });
+
+    link.addEventListener('mouseout', function() {
+        if (this.style.cursor == 'wait') {
+            return;
+        }
+        this.style.backgroundColor = 'darkviolet';
+        this.style.cursor = '';
+    });
+
+    link.addEventListener('click', () => {
+        downloadPromptAsTXT(link);
     });
 
     return link;
@@ -398,6 +445,45 @@ async function getCrossOriginVideo(link) {
         link.style.backgroundColor = btnOriginStyle.backgroundColor;
     }
 
+}
+
+function downloadPromptAsTXT(link) {
+    const btnOriginStyle = {};
+    btnOriginStyle.cursor = link.style.cursor;
+    btnOriginStyle.backgroundColor = link.style.backgroundColor;
+    link.style.cursor = 'wait';
+    link.style.backgroundColor = 'grey';
+    
+    const vid = link.dataset.vid;
+    let text;
+    const url = new URL(location.href);
+    const promptText = window.globalVideoBucket[vid].reference_info.display_content;
+
+    text = url + '\n\n' + promptText;
+
+    const blob = new Blob([text], {type: 'text/plain'});
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+
+    let promptName = getVideoName();
+    if (customPostfixName) {
+        promptName = promptName + '-' + customPostfixName;
+    }
+    promptName = promptName + '-prompt.txt';
+    a.download = promptName;
+
+    document.body.appendChild(a);
+
+    setTimeout(() => {
+        a.click();
+    }, 10);
+    setTimeout(() => {
+        URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+        link.style.cursor = btnOriginStyle.cursor;
+        link.style.backgroundColor = btnOriginStyle.backgroundColor;
+    }, 1000);
 }
 
 function getImageName() {
