@@ -265,7 +265,7 @@ function createRawVideoDownloadButtons(video) {
 function createOneRawVideoDownloadButton(vid) {
     const link = document.createElement('a');
     link.dataset.vid = vid;
-    link.textContent = '点击下载以「会话名-会话ID-下载时间」为文件名的无水印视频';
+    link.textContent = '点击下载以「会话名-会话ID-视频ID」为文件名的无水印视频';
     link.style.whiteSpace = 'break-spaces';
 
     link.classList.add('doubao-nowatermark-555118');
@@ -308,7 +308,7 @@ function createPromptDownloadButton(vid) {
 
     link.dataset.vid = vid;
 
-    link.textContent = '点击将视频Prompt下载为TXT文档';
+    link.textContent = '点击下载以「会话名-会话ID-视频ID」为文件名的视频Prompt文本文档';
     link.style.whiteSpace = 'break-spaces';
 
     link.classList.add('doubao-nowatermark-555118');
@@ -365,9 +365,7 @@ async function getCrossOriginImage(link) {
     }
 
     let imageName = getImageName();
-    if (customPostfixName) {
-        imageName = imageName + '-' + customPostfixName;
-    }
+
     imageName = imageName + '-无水印原图.png';
 
     try {
@@ -408,10 +406,8 @@ async function getCrossOriginVideo(link) {
     const vid = link.dataset.vid;
     let videoUrl = await getUrlByVid(vid);
 
-    let videoName = getVideoName();
-    if (customPostfixName) {
-        videoName = videoName + '-' + customPostfixName;
-    }
+    let videoName = getVideoName(vid);
+
     videoName = videoName + '-无水印.mp4';
 
     if (!videoUrl) {
@@ -453,7 +449,7 @@ function downloadPromptAsTXT(link) {
     btnOriginStyle.backgroundColor = link.style.backgroundColor;
     link.style.cursor = 'wait';
     link.style.backgroundColor = 'grey';
-    
+
     const vid = link.dataset.vid;
     let text;
     const url = new URL(location.href);
@@ -466,10 +462,8 @@ function downloadPromptAsTXT(link) {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
 
-    let promptName = getVideoName();
-    if (customPostfixName) {
-        promptName = promptName + '-' + customPostfixName;
-    }
+    let promptName = getVideoName(vid);
+
     promptName = promptName + '-prompt.txt';
     a.download = promptName;
 
@@ -491,17 +485,25 @@ function getImageName() {
     const chatID = document.location.pathname.replace('/chat/', '').trim();
     const timeStr = getYmdHMS();
 
-    const imageName = currentTitle + '-' + chatID + '-' + timeStr;
+    let imageName = currentTitle + '-' + chatID + '-' + timeStr;
+
+    if (customPostfixName) {
+        imageName = imageName + '-' + customPostfixName;
+    }
 
     return imageName;
 }
 
-function getVideoName() {
+function getVideoName(vid) {
     const currentTitle = document.title.replace('- 豆包', '').trim();
     const chatID = document.location.pathname.replace('/chat/', '').trim();
-    const timeStr = getYmdHMS();
+    //const timeStr = getYmdHMS();
 
-    const videoName = currentTitle + '-' + chatID + '-' + timeStr;
+    let videoName = currentTitle + '-' + chatID + '-' + vid;
+
+    if (customPostfixName) {
+        videoName = videoName + '-' + customPostfixName;
+    }
 
     return videoName;
 }
