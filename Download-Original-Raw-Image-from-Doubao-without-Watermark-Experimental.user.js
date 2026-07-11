@@ -6,7 +6,7 @@
 // @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。 You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark.
 // @description:zh  这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。 You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark.
 // @description:en  You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。
-// @version         0.1.4
+// @version         0.2.0
 // @author          catscarlet
 // @license         GNU Affero General Public License v3.0
 // @match           https://www.doubao.com/chat/*

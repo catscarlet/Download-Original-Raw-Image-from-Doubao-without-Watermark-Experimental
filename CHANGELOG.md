@@ -4,6 +4,15 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.2.0
+
+Now **Support Downloading Video without watermark after 2026.07.03 update**.
+
+- Support no-watermark-video-download after 2026.07.03 doubao update.
+- Change no-watermark-video-download-filename. use vid instead of datetime.
+- Support download video prompt as txt.
+- Minor bug fixes.
+
 ## 0.1.4
 
 - Set no referrer when getting video url
