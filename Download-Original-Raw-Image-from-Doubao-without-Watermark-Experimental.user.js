@@ -11,14 +11,15 @@
 // @license         GNU Affero General Public License v3.0
 // @match           https://www.doubao.com/chat/*
 // @run-at          document-end
-// @grant           none
+// @grant           GM_xmlhttpRequest
+// @grant           unsafeWindow
 // ==/UserScript==
 
 const customPostfixName = '';
-const OriginalXHR = window.XMLHttpRequest;
-window.globalImageBucket = {};
-window.globalVideoBucket = {};
-window.globalVideoKeyValveBucket = {};
+const OriginalXHR = unsafeWindow.XMLHttpRequest;
+unsafeWindow.globalImageBucket = {};
+unsafeWindow.globalVideoBucket = {};
+unsafeWindow.globalVideoKeyValveBucket = {};
 
 (function() {
     'use strict';
@@ -81,7 +82,7 @@ window.globalVideoKeyValveBucket = {};
 
     observer.observe(document.documentElement, config);
 
-    window.XMLHttpRequest = createModifiedXHR;
+    unsafeWindow.XMLHttpRequest = createModifiedXHR;
 
     setCanvasDataset();
 })();
@@ -127,30 +128,26 @@ function createModifiedXHR() {
                                                     return false;
                                                 }
                                                 const imageKey = getKeyFromUrl(item.image.image_preview.url);
-                                                window.globalImageBucket[imageKey] = item.image;
+                                                unsafeWindow.globalImageBucket[imageKey] = item.image;
                                             } else if (item.type == 2) {
                                                 let reference_info = message.reference_info;
                                                 let vid = item.video.vid;
-                                                window.globalVideoBucket[vid] = item.video;
-                                                window.globalVideoBucket[vid].reference_info = reference_info;
+                                                unsafeWindow.globalVideoBucket[vid] = item.video;
+                                                unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
                                             } else {
-                                                //console.log('item.type unknown. item.type ==' + item.type);
                                             }
                                         });
 
                                     }
                                 } else {
-                                    console.log(content_block);
                                 }
 
                             } else {
-                                //console.log('message does not match');
                             }
 
                         });
 
                     } else {
-                        console.log('jsonData does not have downlink_body');
                     }
 
 
@@ -158,7 +155,6 @@ function createModifiedXHR() {
             });
         } else if (this._method && this._method.toUpperCase() === 'POST' &&
             this._url && this._url.includes('/samantha/video/get_play_info?')) {
-
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
                     const postDataRaw = JSON.parse(body);
@@ -167,7 +163,7 @@ function createModifiedXHR() {
                     const main = jsonData.data.play_infos[0].main;
                     const urlKey = getKeyFromUrl(main);
 
-                    window.globalVideoKeyValveBucket[urlKey] = vid;
+                    unsafeWindow.globalVideoKeyValveBucket[urlKey] = vid;
                 }
             });
         }
@@ -244,7 +240,7 @@ function createRawVideoDownloadButtons(video) {
     const videoTarget = video.querySelector('video');
     const videoUrl = videoTarget.src;
     const urlKey = getKeyFromUrl(videoUrl);
-    const vid = window.globalVideoKeyValveBucket[urlKey];
+    const vid = unsafeWindow.globalVideoKeyValveBucket[urlKey];
 
     const links = document.createElement('div');
     links.style.position = 'absolute';
@@ -406,14 +402,13 @@ async function getCrossOriginVideo(link) {
     const vid = link.dataset.vid;
     let videoUrl = await getUrlByVid(vid);
 
-    let videoName = getVideoName(vid);
-
-    videoName = videoName + '-无水印.mp4';
-
     if (!videoUrl) {
         console.error('抱歉，获取视频播放信息失败');
         alert('抱歉，获取视频播放信息失败');
     }
+
+    let videoName = getVideoName(vid);
+    videoName = videoName + '-无水印.mp4';
 
     try {
         const response = await fetch(videoUrl, {mode: 'cors', referrer: ''});
@@ -453,7 +448,7 @@ function downloadPromptAsTXT(link) {
     const vid = link.dataset.vid;
     let text;
     const url = new URL(location.href);
-    const promptText = window.globalVideoBucket[vid].reference_info.display_content;
+    const promptText = unsafeWindow.globalVideoBucket[vid].reference_info.display_content;
 
     text = url + '\n\n' + promptText;
 
@@ -509,19 +504,15 @@ function getVideoName(vid) {
 }
 
 function getImageOriRawUrlByImageKey(ImageKey) {
-    if (Object.hasOwn(window.globalImageBucket, ImageKey)) {
-        if (window.globalImageBucket[ImageKey] != undefined) {
-            const image_ori_raw = window.globalImageBucket[ImageKey].image_ori_raw.url;
+    if (Object.hasOwn(unsafeWindow.globalImageBucket, ImageKey)) {
+        if (unsafeWindow.globalImageBucket[ImageKey] != undefined) {
+            const image_ori_raw = unsafeWindow.globalImageBucket[ImageKey].image_ori_raw.url;
 
             return image_ori_raw;
         } else {
-            console.log('image_ori_raw not found in window.globalImageBucket.' + ImageKey);
-
             return false;
         }
     } else {
-        console.log('ImageKey not found in globalImageBucket');
-
         return false;
     }
 }
@@ -548,35 +539,102 @@ function getKeyFromUrl(url) {
 }
 
 async function getUrlByVid(vid) {
-    const url = 'https://www.doubao.com/samantha/media/get_play_info?version_code=20800&language=zh-CN&device_platform=web&aid=497858&real_aid=497858&pkg_type=release_version&device_id=&pc_version=2.51.7&region=&sys_region=&samantha_web=1&use-olympus-account=1&web_tab_id=';
+    const videoItem = unsafeWindow.globalVideoBucket[vid];
+    const videoModel = JSON.parse(videoItem.video_model);
 
+    const urlList = await getUrlByModel(videoModel);
+    const randomPickedVideoUrl = urlList[Math.floor(Math.random() * urlList.length)];
+
+    return randomPickedVideoUrl;
+}
+
+async function getUrlByModel(videoModel) {
+    const fallbackApi = videoModel.fallback_api;
+    const url = getNoWatermarkApi(fallbackApi);
+
+    const r = await GM.xmlHttpRequest({
+        method: 'GET',
+        url: url,
+        referrer: '',
+    }).catch(e => console.error(e));
+
+    const response = JSON.parse(r.response);
+    const videoInfoData = response.video_info.data;
+    let urlList = await decipherUrlsFromVideoInfoData(videoInfoData);
+    return urlList;
+}
+
+async function decipherUrlsFromVideoInfoData(videoInfoData) {
+    const keySeed = videoInfoData.key_seed;
+    const FPLAY_KDF_SALT = 'TdTC5rgxYgkOUrPHpnM7pByyRiuCmrWKGWs521cXdST0m69/COjWjSanLjfBqVovHwWlGJKu8pSXMrYqOKrdWA==';
+
+    let urlListRaw = [];
+    urlListRaw.push(videoInfoData.video_list.video_1.main_url);
+    urlListRaw.push(videoInfoData.video_list.video_1.backup_url_1);
+
+    let urlList = [];
+
+    for (const urlRaw of urlListRaw) {
+        try {
+            const b64ToBytes = (v) => {
+                const s = String(v || '');
+                const base64 = s.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(s.length / 4) * 4, '=');
+                const bin = atob(base64);
+                return Uint8Array.from(bin, c => c.charCodeAt(0));
+            };
+
+            const encrypted = b64ToBytes(urlRaw);
+            const seed = b64ToBytes(keySeed);
+            const ciphertext = encrypted.slice(4);
+            const subtle = crypto.subtle;
+            const firstHash = new Uint8Array(await subtle.digest('SHA-512', seed));
+            const keyMaterial = new Uint8Array(128);
+            const salt = b64ToBytes(FPLAY_KDF_SALT);
+            keyMaterial.set(firstHash, 0);
+            keyMaterial.set(salt, 64);
+            const derived = new Uint8Array(await subtle.digest('SHA-512', keyMaterial));
+            const keyBytes = derived.slice(0, 16);
+            const iv = derived.slice(16, 32);
+            const cryptoKey = await subtle.importKey('raw', keyBytes, 'AES-CBC', false, ['decrypt']);
+            const decrypted = new Uint8Array(
+                await subtle.decrypt({name: 'AES-CBC', iv}, cryptoKey, ciphertext)
+            );
+            let end = decrypted.length;
+            const pad = decrypted[end - 1];
+            if (pad >= 1 && pad <= 16) {
+                let valid = true;
+                for (let i = 0; i < pad; i++) {
+                    if (decrypted[end - 1 - i] !== pad) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid) {
+                    end -= pad;
+                }
+            }
+            const rst = new TextDecoder().decode(decrypted.slice(0, end)).trim();
+            urlList.push(rst);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    return urlList;
+}
+
+function getNoWatermarkApi(fallback_api) {
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'origin': 'https://www.doubao.com',
-            },
-            referrer: null,
-            body: JSON.stringify({key: vid}),
-        });
-
-        let result = await response.json();
-
-        if (!result || !result.data) {
-            console.log('API failed');
-            console.log(result);
-
+        const url = new URL(fallback_api);
+        if (!url.searchParams.get('key_seed')) {
             return false;
         }
+        url.searchParams.delete('force_fids');
+        url.searchParams.delete('logo_type');
+        url.searchParams.set('codec_type', '1');
 
-        let main_url = await result.data.original_media_info.main_url;
-
-        return main_url;
+        return url.toString();
     } catch (e) {
-        console.error('获取视频播放信息失败:', e);
-
-        return null;
+        console.log(e);
     }
 }
