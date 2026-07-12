@@ -119,25 +119,25 @@ function createModifiedXHR() {
                                 let content_block = message.content_block;
 
                                 if (Array.isArray(content_block)) {
-                                    if (content_block.length >= 2 && Object.hasOwn(content_block[1], 'content') && Object.hasOwn(content_block[1].content, 'creation_block') && Object.hasOwn(content_block[1].content.creation_block, 'creations')) {
-
-                                        let creations = content_block[1].content.creation_block.creations;
-                                        creations.forEach((item, j) => {
-                                            if (item.type == 1) {
-                                                if (!item.image.key) {
-                                                    return false;
+                                    for (const block of content_block) {
+                                        if (Object.hasOwn(block, 'content') && Object.hasOwn(block.content, 'creation_block') && Object.hasOwn(block.content.creation_block, 'creations')) {
+                                            let creations = block.content.creation_block.creations;
+                                            creations.forEach((item, j) => {
+                                                if (item.type == 1) {
+                                                    if (!item.image.key) {
+                                                        return false;
+                                                    }
+                                                    const imageKey = getKeyFromUrl(item.image.image_preview.url);
+                                                    unsafeWindow.globalImageBucket[imageKey] = item.image;
+                                                } else if (item.type == 2) {
+                                                    let reference_info = message.reference_info;
+                                                    let vid = item.video.vid;
+                                                    unsafeWindow.globalVideoBucket[vid] = item.video;
+                                                    unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
+                                                } else {
                                                 }
-                                                const imageKey = getKeyFromUrl(item.image.image_preview.url);
-                                                unsafeWindow.globalImageBucket[imageKey] = item.image;
-                                            } else if (item.type == 2) {
-                                                let reference_info = message.reference_info;
-                                                let vid = item.video.vid;
-                                                unsafeWindow.globalVideoBucket[vid] = item.video;
-                                                unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
-                                            } else {
-                                            }
-                                        });
-
+                                            });
+                                        }
                                     }
                                 } else {
                                 }
