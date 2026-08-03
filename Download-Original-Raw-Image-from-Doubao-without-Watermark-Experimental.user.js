@@ -101,7 +101,6 @@ function createModifiedXHR() {
     const originalSend = xhr.send;
 
     xhr.send = function(body) {
-
         if (this._method && this._method.toUpperCase() === 'POST' &&
             this._url && this._url.includes('/im/chain/single?')) {
 
@@ -134,6 +133,21 @@ function createModifiedXHR() {
                                                     let vid = item.video.vid;
                                                     unsafeWindow.globalVideoBucket[vid] = item.video;
                                                     unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
+
+                                                    let video_1_main_url = atob(JSON.parse(item.video.video_model).video_list.video_1.main_url);
+                                                    let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
+                                                    let video_1_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_1.backup_url_1);
+                                                    let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
+
+                                                    let video_2_main_url = atob(JSON.parse(item.video.video_model).video_list.video_2.main_url);
+                                                    let video_2_main_url_key = getKeyFromUrl(video_1_main_url);
+                                                    let video_2_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_2.backup_url_1);
+                                                    let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
+
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
                                                 } else {
                                                 }
                                             });
@@ -153,7 +167,7 @@ function createModifiedXHR() {
 
                 }
             });
-        } else if (this._method && this._method.toUpperCase() === 'POST' &&
+        }/* else if (this._method && this._method.toUpperCase() === 'POST' &&
             this._url && this._url.includes('/samantha/video/get_play_info?')) {
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
@@ -167,6 +181,7 @@ function createModifiedXHR() {
                 }
             });
         }
+        */
 
         return originalSend.apply(this, arguments);
     };
@@ -238,7 +253,7 @@ function createRawImageDownloadButton() {
 
 function createRawVideoDownloadButtons(video) {
     const videoTarget = video.querySelector('video');
-    const videoUrl = videoTarget.src;
+    const videoUrl = videoTarget.currentSrc;
     const urlKey = getKeyFromUrl(videoUrl);
     const vid = unsafeWindow.globalVideoKeyValveBucket[urlKey];
 
@@ -249,8 +264,8 @@ function createRawVideoDownloadButtons(video) {
     links.style.left = x + 'px';
     links.style.top = 'calc(2em + 7px)';
 
-    let rawVideoDownloadButton = createOneRawVideoDownloadButton(vid);
-    links.appendChild(rawVideoDownloadButton);
+    let downloadFromFallbackUrlButton = createOneRawVideoDownloadFromFallbackUrlButton(vid);
+    links.appendChild(downloadFromFallbackUrlButton);
 
     let rawPromptDownloadButton = createPromptDownloadButton(vid);
     links.appendChild(rawPromptDownloadButton);
@@ -258,7 +273,7 @@ function createRawVideoDownloadButtons(video) {
     return links;
 }
 
-function createOneRawVideoDownloadButton(vid) {
+function createOneRawVideoDownloadFromFallbackUrlButton(vid) {
     const link = document.createElement('a');
     link.dataset.vid = vid;
     link.textContent = '点击下载以「会话名-会话ID-视频ID」为文件名的无水印视频';
