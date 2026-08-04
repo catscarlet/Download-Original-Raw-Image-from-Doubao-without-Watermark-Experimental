@@ -4,6 +4,11 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.2.1
+
+- Update download logic to match doubao update. Fix no watermark video download.
+- Fix some images can't be downloaded.
+
 ## 0.2.0
 
 Now **Support Downloading Video without watermark after 2026.07.03 update**.
