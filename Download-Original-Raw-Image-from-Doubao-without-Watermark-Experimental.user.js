@@ -167,21 +167,7 @@ function createModifiedXHR() {
 
                 }
             });
-        }/* else if (this._method && this._method.toUpperCase() === 'POST' &&
-            this._url && this._url.includes('/samantha/video/get_play_info?')) {
-            xhr.addEventListener('load', function() {
-                if (xhr.readyState === 4) {
-                    const postDataRaw = JSON.parse(body);
-                    const vid = postDataRaw.vid;
-                    const jsonData = JSON.parse(xhr.responseText);
-                    const main = jsonData.data.play_infos[0].main;
-                    const urlKey = getKeyFromUrl(main);
-
-                    unsafeWindow.globalVideoKeyValveBucket[urlKey] = vid;
-                }
-            });
         }
-        */
 
         return originalSend.apply(this, arguments);
     };
@@ -576,6 +562,7 @@ async function getUrlByModel(videoModel) {
     const response = JSON.parse(r.response);
     const videoInfoData = response.video_info.data;
     let urlList = await decipherUrlsFromVideoInfoData(videoInfoData);
+
     return urlList;
 }
 
