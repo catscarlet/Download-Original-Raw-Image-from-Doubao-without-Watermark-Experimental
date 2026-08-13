@@ -68,7 +68,7 @@
 
 ![snap-cors1-020.webp](snap-cors1-020.webp)
 
-如您失误点击了禁止并将其加入了黑名单，则请打开脚本编辑器，编辑本脚本，并点击标签页上的Setting，然后在页面内找到 `XHR Security` 并在 `User domain blacklist` 中将域名移除白名单。
+如您失误点击了禁止并将其加入了黑名单，则请打开脚本编辑器，编辑本脚本，并点击标签页上的Setting，然后在页面内找到 `XHR Security` 并在 `User domain blacklist` 中将域名移除黒名单。
 
 ![snap-cors2-020.webp](snap-cors2-020.webp)
 
