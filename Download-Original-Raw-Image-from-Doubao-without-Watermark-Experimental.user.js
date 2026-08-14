@@ -134,6 +134,7 @@ function createModifiedXHR() {
                                                     unsafeWindow.globalVideoBucket[vid] = item.video;
                                                     unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
 
+                                                    let video_download_url = getKeyFromUrl(item.video.download_url);
                                                     let video_1_main_url = atob(JSON.parse(item.video.video_model).video_list.video_1.main_url);
                                                     let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
                                                     let video_1_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_1.backup_url_1);
@@ -144,6 +145,7 @@ function createModifiedXHR() {
                                                     let video_2_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_2.backup_url_1);
                                                     let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
 
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
                                                     unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
                                                     unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
                                                     unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
