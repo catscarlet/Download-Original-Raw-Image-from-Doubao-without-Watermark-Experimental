@@ -245,6 +245,11 @@ function createRawVideoDownloadButtons(video) {
     const urlKey = getKeyFromUrl(videoUrl);
     const vid = unsafeWindow.globalVideoKeyValveBucket[urlKey];
 
+    if (!vid) {
+        console.error('抱歉，获取vid失败。');
+        alert('抱歉，获取vid失败。');
+    }
+
     const links = document.createElement('div');
     links.style.position = 'absolute';
     const x = 0;
@@ -296,6 +301,13 @@ function createOneRawVideoDownloadFromFallbackUrlButton(vid) {
     });
 
     link.addEventListener('click', async () => {
+        if (!vid) {
+            console.error('抱歉，vid参数错误失败。');
+            alert('抱歉，vid参数错误失败。');
+
+            return false;
+        }
+
         getCrossOriginVideo(link);
     });
 
@@ -338,6 +350,13 @@ function createPromptDownloadButton(vid) {
     });
 
     link.addEventListener('click', () => {
+        if (!vid) {
+            console.error('抱歉，vid参数错误失败。');
+            alert('抱歉，vid参数错误失败。');
+
+            return false;
+        }
+
         downloadPromptAsTXT(link);
     });
 
@@ -408,6 +427,8 @@ async function getCrossOriginVideo(link) {
     if (!videoUrl) {
         console.error('抱歉，获取视频播放信息失败');
         alert('抱歉，获取视频播放信息失败');
+
+        return false;
     }
 
     let videoName = getVideoName(vid);
