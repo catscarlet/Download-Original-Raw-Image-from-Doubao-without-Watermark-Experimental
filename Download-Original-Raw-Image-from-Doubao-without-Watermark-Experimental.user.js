@@ -169,6 +169,29 @@ function createModifiedXHR() {
 
                 }
             });
+        } else if (this._method && this._method.toUpperCase() === 'POST' &&
+            this._url && this._url.includes('/creativity/resource/get_without_watermark?')) {
+            xhr.addEventListener('load', function() {
+                if (xhr.readyState === 4) {
+                    const postDataRaw = JSON.parse(body);
+                    const vid = postDataRaw.vid[0];
+                    const jsonData = JSON.parse(xhr.responseText);
+
+                    let item = {
+                        'video': null,
+                    };
+
+                    item.video = jsonData.data.preview_video[vid];
+                    let video_download_url = getKeyFromUrl(item.video.download_url);
+                    let video_1_main_url = atob(JSON.parse(item.video.video_model).video_list.video_1.main_url);
+                    let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
+                    let video_1_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_1.backup_url_1);
+                    let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
+                    unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
+                    unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
+                    unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
+                }
+            });
         }
 
         return originalSend.apply(this, arguments);
