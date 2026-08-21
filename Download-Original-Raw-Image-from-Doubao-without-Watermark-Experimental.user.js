@@ -141,7 +141,7 @@ function createModifiedXHR() {
                                                     let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
 
                                                     let video_2_main_url = atob(JSON.parse(item.video.video_model).video_list.video_2.main_url);
-                                                    let video_2_main_url_key = getKeyFromUrl(video_1_main_url);
+                                                    let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
                                                     let video_2_backup_url_1 = atob(JSON.parse(item.video.video_model).video_list.video_2.backup_url_1);
                                                     let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
 
