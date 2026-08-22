@@ -4,6 +4,10 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.2.3
+
+- Fix a typo which caused some videos couldn't be downloaded.
+
 ## 0.2.2
 
 - **Support no-watermark-download when so-called-official-no-watermark is on**
