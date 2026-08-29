@@ -135,22 +135,25 @@ function createModifiedXHR() {
                                                     unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
 
                                                     let video_download_url = getKeyFromUrl(item.video.download_url);
+                                                    unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
                                                     let itemVideoModel = JSON.parse(item.video.video_model);
-                                                    let video_1_main_url = atob(itemVideoModel.video_list.video_1.main_url);
+                                                    let video_list_in_video_model = itemVideoModel.video_list;
+                                                    let video_1_main_url = atob(video_list_in_video_model.video_1.main_url);
                                                     let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
-                                                    let video_1_backup_url_1 = atob(itemVideoModel.video_list.video_1.backup_url_1);
+                                                    let video_1_backup_url_1 = atob(video_list_in_video_model.video_1.backup_url_1);
                                                     let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
 
-                                                    let video_2_main_url = atob(itemVideoModel.video_list.video_2.main_url);
-                                                    let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
-                                                    let video_2_backup_url_1 = atob(itemVideoModel.video_list.video_2.backup_url_1);
-                                                    let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
-
-                                                    unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
                                                     unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
                                                     unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
-                                                    unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
-                                                    unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
+
+                                                    if (Object.hasOwn(video_list_in_video_model, 'video_2')) {
+                                                        let video_2_main_url = atob(video_list_in_video_model.video_2.main_url);
+                                                        let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
+                                                        let video_2_backup_url_1 = atob(video_list_in_video_model.video_2.backup_url_1);
+                                                        let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
+                                                        unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
+                                                        unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
+                                                    }
                                                 } else {
                                                 }
                                             });
@@ -185,13 +188,25 @@ function createModifiedXHR() {
                     item.video = jsonData.data.preview_video[vid];
                     let video_download_url = getKeyFromUrl(item.video.download_url);
                     let itemVideoModel = JSON.parse(item.video.video_model);
-                    let video_1_main_url = atob(itemVideoModel.video_list.video_1.main_url);
+                    let video_list_in_video_model = itemVideoModel.video_list;
+                    let video_1_main_url = atob(video_list_in_video_model.video_1.main_url);
                     let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
-                    let video_1_backup_url_1 = atob(itemVideoModel.video_list.video_1.backup_url_1);
+                    let video_1_backup_url_1 = atob(video_list_in_video_model.video_1.backup_url_1);
                     let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
                     unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
                     unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
                     unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
+
+                    if (Object.hasOwn(video_list_in_video_model, 'video_2')) {
+                        let video_2_main_url = atob(video_list_in_video_model.video_2.main_url);
+                        let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
+
+                        let video_2_backup_url_1 = atob(video_list_in_video_model.video_2.backup_url_1);
+                        let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
+
+                        unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
+                        unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
+                    }
                 }
             });
         }
