@@ -4,6 +4,11 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.2.4
+
+- Fix a bug caused by some conversations only have one video link.
+- Roll back part of code to v0.2.0 to support videos generated on mobile.
+
 ## 0.2.3
 
 - Fix a typo which caused some videos couldn't be downloaded.

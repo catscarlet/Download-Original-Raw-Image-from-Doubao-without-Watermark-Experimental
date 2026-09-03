@@ -90,9 +90,10 @@
 ### 已知问题
 
 -   ~使用 智能编辑、区域重绘、扩图、擦除、变清晰 等编辑功能生成的图片无法下载。~（已在 0.2.1 修复）
--   在会话中新生成的的图片和视频需要在页面刷新后才能下载。
+-   在会话中新生成的的图片和视频，可能需要在页面刷新后才能下载。
 -   部分会话的图片无法下载。
 -   ~（20260601）版本0.1.0后有时会出现无法下载的情况，刷新可以解决。（豆包逻辑变更，此问题已无法复现）~
+-   如果你的视频生成时间很早，可能豆包会使用本脚本不支持的旧API来提供。如有此类情况，请使用这个[Download-from-Doubao-Video-Sharing-without-Watermark 从豆包分享页面下载无水印视频](https://github.com/catscarlet/Download-from-Doubao-Video-Sharing-without-Watermark)脚本进行下载。
 
 本项目欢迎 Pull Request 修复以上这些问题。
 
@@ -108,6 +109,7 @@ Github： <https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao
 ## 关联项目
 
 [Download Origin Image from Doubao without Watermark 从豆包下载预览图图片](https://greasyfork.org/scripts/527890)
+[Download-from-Doubao-Video-Sharing-without-Watermark 从豆包分享页面下载无水印视频](https://greasyfork.org/scripts/582844)
 
 ## LICENSE
 

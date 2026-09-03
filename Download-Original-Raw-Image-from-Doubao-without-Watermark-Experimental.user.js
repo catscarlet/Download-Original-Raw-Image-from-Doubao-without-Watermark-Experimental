@@ -6,7 +6,7 @@
 // @description     这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。 You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark.
 // @description:zh  这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。 You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark.
 // @description:en  You can try this userscript to Download Original Raw Image and Raw Video from doubao.com without Watermark. 这个脚本可以让你尝试从豆包（www.doubao.com）下载无水印原图和无水印视频。
-// @version         0.2.3
+// @version         0.2.4
 // @author          catscarlet
 // @license         GNU Affero General Public License v3.0
 // @match           https://www.doubao.com/chat/*
@@ -136,6 +136,7 @@ function createModifiedXHR() {
 
                                                     let video_download_url = getKeyFromUrl(item.video.download_url);
                                                     unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
+
                                                     let itemVideoModel = JSON.parse(item.video.video_model);
                                                     let video_list_in_video_model = itemVideoModel.video_list;
                                                     let video_1_main_url = atob(video_list_in_video_model.video_1.main_url);
@@ -151,6 +152,7 @@ function createModifiedXHR() {
                                                         let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
                                                         let video_2_backup_url_1 = atob(video_list_in_video_model.video_2.backup_url_1);
                                                         let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
+
                                                         unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
                                                         unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
                                                     }
