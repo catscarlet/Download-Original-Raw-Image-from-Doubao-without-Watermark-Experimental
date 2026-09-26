@@ -13,6 +13,7 @@
 // @run-at          document-end
 // @grant           GM_xmlhttpRequest
 // @grant           unsafeWindow
+// @connect         vas-lf-x.snssdk.com
 // ==/UserScript==
 
 const customPostfixName = '';
