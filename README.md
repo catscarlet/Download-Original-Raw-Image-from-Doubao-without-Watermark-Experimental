@@ -108,8 +108,8 @@ Github： <https://github.com/catscarlet/Download-Original-Raw-Image-from-Doubao
 
 ## 关联项目
 
-[Download Origin Image from Doubao without Watermark 从豆包下载预览图图片](https://greasyfork.org/scripts/527890)
-[Download-from-Doubao-Video-Sharing-without-Watermark 从豆包分享页面下载无水印视频](https://greasyfork.org/scripts/582844)
+- [Download Origin Image from Doubao without Watermark 从豆包下载预览图图片](https://greasyfork.org/scripts/527890)
+- [Download-from-Doubao-Video-Sharing-without-Watermark 从豆包分享页面下载无水印视频](https://greasyfork.org/scripts/582844)
 
 ## LICENSE
 
