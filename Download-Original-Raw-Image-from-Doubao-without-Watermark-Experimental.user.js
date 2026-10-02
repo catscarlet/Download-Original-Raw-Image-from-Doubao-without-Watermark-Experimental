@@ -131,9 +131,13 @@ function createModifiedXHR() {
                                                     unsafeWindow.globalImageBucket[imageKey] = item.image;
                                                 } else if (item.type == 2) {
                                                     let reference_info = message.reference_info;
+                                                    let creation_id = item.id;
+                                                    let user_creation = JSON.parse(message.ext.user_creation)[creation_id];
+                                                    let prompt = user_creation.prompt;
                                                     let vid = item.video.vid;
                                                     unsafeWindow.globalVideoBucket[vid] = item.video;
                                                     unsafeWindow.globalVideoBucket[vid].reference_info = reference_info;
+                                                    unsafeWindow.globalVideoBucket[vid].prompt = prompt;
 
                                                     let video_download_url = getKeyFromUrl(item.video.download_url);
                                                     unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
@@ -528,7 +532,7 @@ function downloadPromptAsTXT(link) {
     const vid = link.dataset.vid;
     let text;
     const url = new URL(location.href);
-    const promptText = unsafeWindow.globalVideoBucket[vid].reference_info.display_content;
+    const promptText = unsafeWindow.globalVideoBucket[vid].prompt;
 
     text = url + '\n\n' + promptText;
 
