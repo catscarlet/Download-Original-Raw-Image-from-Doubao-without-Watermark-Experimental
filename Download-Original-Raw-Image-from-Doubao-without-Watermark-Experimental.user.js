@@ -19,6 +19,7 @@
 const customPostfixName = '';
 const OriginalXHR = unsafeWindow.XMLHttpRequest;
 unsafeWindow.globalImageBucket = {};
+unsafeWindow.globalImageBucketShort = {};
 unsafeWindow.globalVideoBucket = {};
 unsafeWindow.globalVideoKeyValveBucket = {};
 
@@ -114,7 +115,6 @@ function createModifiedXHR() {
                         let messages = jsonData.downlink_body.pull_singe_chain_downlink_body.messages;
 
                         messages.forEach((message, i) => {
-
                             if (message.user_type == 2 && Object.hasOwn(message, 'content_block') && message.content_block) {
                                 let content_block = message.content_block;
 
@@ -128,7 +128,9 @@ function createModifiedXHR() {
                                                         return false;
                                                     }
                                                     const imageKey = getKeyFromUrl(item.image.image_preview.url);
+                                                    const imageKeyShort = imageKey.substr(1, imageKey.search('~') - 1);
                                                     unsafeWindow.globalImageBucket[imageKey] = item.image;
+                                                    unsafeWindow.globalImageBucketShort[imageKeyShort] = item.image;
                                                 } else if (item.type == 2) {
                                                     let reference_info = message.reference_info;
                                                     let creation_id = item.id;
@@ -185,34 +187,36 @@ function createModifiedXHR() {
             xhr.addEventListener('load', function() {
                 if (xhr.readyState === 4) {
                     const postDataRaw = JSON.parse(body);
-                    const vid = postDataRaw.vid[0];
-                    const jsonData = JSON.parse(xhr.responseText);
+                    if (Object.hasOwn(postDataRaw, 'vid')) {
+                        const vid = postDataRaw.vid[0];
+                        const jsonData = JSON.parse(xhr.responseText);
 
-                    let item = {
-                        'video': null,
-                    };
+                        let item = {
+                            'video': null,
+                        };
 
-                    item.video = jsonData.data.preview_video[vid];
-                    let video_download_url = getKeyFromUrl(item.video.download_url);
-                    let itemVideoModel = JSON.parse(item.video.video_model);
-                    let video_list_in_video_model = itemVideoModel.video_list;
-                    let video_1_main_url = atob(video_list_in_video_model.video_1.main_url);
-                    let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
-                    let video_1_backup_url_1 = atob(video_list_in_video_model.video_1.backup_url_1);
-                    let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
-                    unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
-                    unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
-                    unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
+                        item.video = jsonData.data.preview_video[vid];
+                        let video_download_url = getKeyFromUrl(item.video.download_url);
+                        let itemVideoModel = JSON.parse(item.video.video_model);
+                        let video_list_in_video_model = itemVideoModel.video_list;
+                        let video_1_main_url = atob(video_list_in_video_model.video_1.main_url);
+                        let video_1_main_url_key = getKeyFromUrl(video_1_main_url);
+                        let video_1_backup_url_1 = atob(video_list_in_video_model.video_1.backup_url_1);
+                        let video_1_backup_url_1_key = getKeyFromUrl(video_1_backup_url_1);
+                        unsafeWindow.globalVideoKeyValveBucket[video_download_url] = vid;
+                        unsafeWindow.globalVideoKeyValveBucket[video_1_main_url_key] = vid;
+                        unsafeWindow.globalVideoKeyValveBucket[video_1_backup_url_1_key] = vid;
 
-                    if (Object.hasOwn(video_list_in_video_model, 'video_2')) {
-                        let video_2_main_url = atob(video_list_in_video_model.video_2.main_url);
-                        let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
+                        if (Object.hasOwn(video_list_in_video_model, 'video_2')) {
+                            let video_2_main_url = atob(video_list_in_video_model.video_2.main_url);
+                            let video_2_main_url_key = getKeyFromUrl(video_2_main_url);
 
-                        let video_2_backup_url_1 = atob(video_list_in_video_model.video_2.backup_url_1);
-                        let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
+                            let video_2_backup_url_1 = atob(video_list_in_video_model.video_2.backup_url_1);
+                            let video_2_backup_url_1_key = getKeyFromUrl(video_2_backup_url_1);
 
-                        unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
-                        unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
+                            unsafeWindow.globalVideoKeyValveBucket[video_2_main_url_key] = vid;
+                            unsafeWindow.globalVideoKeyValveBucket[video_2_backup_url_1_key] = vid;
+                        }
                     }
                 }
             });
@@ -588,6 +592,7 @@ function getVideoName(vid) {
 }
 
 function getImageOriRawUrlByImageKey(ImageKey) {
+    const ImageKeyShort = ImageKey.substr(1, ImageKey.indexOf('~') - 1);
     if (Object.hasOwn(unsafeWindow.globalImageBucket, ImageKey)) {
         if (unsafeWindow.globalImageBucket[ImageKey] != undefined) {
             const image_ori_raw = unsafeWindow.globalImageBucket[ImageKey].image_ori_raw.url;
@@ -596,6 +601,10 @@ function getImageOriRawUrlByImageKey(ImageKey) {
         } else {
             return false;
         }
+    } else if (Object.hasOwn(unsafeWindow.globalImageBucketShort, ImageKeyShort)) {
+        const image_ori_raw = unsafeWindow.globalImageBucketShort[ImageKeyShort].image_ori_raw.url;
+
+        return image_ori_raw;
     } else {
         return false;
     }
