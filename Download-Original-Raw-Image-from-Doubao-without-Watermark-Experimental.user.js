@@ -128,7 +128,7 @@ function createModifiedXHR() {
                                                         return false;
                                                     }
                                                     const imageKey = getKeyFromUrl(item.image.image_preview.url);
-                                                    const imageKeyShort = imageKey.substr(1, imageKey.search('~') - 1);
+                                                    const imageKeyShort = imageKey.substring(1, imageKey.search('~') - 1);
                                                     unsafeWindow.globalImageBucket[imageKey] = item.image;
                                                     unsafeWindow.globalImageBucketShort[imageKeyShort] = item.image;
                                                 } else if (item.type == 2) {
@@ -592,7 +592,7 @@ function getVideoName(vid) {
 }
 
 function getImageOriRawUrlByImageKey(ImageKey) {
-    const ImageKeyShort = ImageKey.substr(1, ImageKey.indexOf('~') - 1);
+    const ImageKeyShort = ImageKey.substring(1, ImageKey.indexOf('~') - 1);
     if (Object.hasOwn(unsafeWindow.globalImageBucket, ImageKey)) {
         if (unsafeWindow.globalImageBucket[ImageKey] != undefined) {
             const image_ori_raw = unsafeWindow.globalImageBucket[ImageKey].image_ori_raw.url;
