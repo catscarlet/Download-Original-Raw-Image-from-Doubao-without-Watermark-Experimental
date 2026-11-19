@@ -446,7 +446,7 @@ async function getCrossOriginImage(link) {
         return false;
     }
 
-    let imageName = getImageName();
+    let imageName = getImageName(imageKey);
 
     imageName = imageName + '-无水印原图.png';
 
@@ -563,12 +563,14 @@ function downloadPromptAsTXT(link) {
     }, 1000);
 }
 
-function getImageName() {
+function getImageName(imageKey) {
     const currentTitle = document.title.replace('- 豆包', '').trim();
     const chatID = document.location.pathname.replace('/chat/', '').trim();
-    const timeStr = getYmdHMS();
+    //const timeStr = getYmdHMS();
+    const trimmedKey = trimKey(imageKey);
 
-    let imageName = currentTitle + '-' + chatID + '-' + timeStr;
+    //let imageName = currentTitle + '-' + chatID + '-' + timeStr;
+    let imageName = currentTitle + '-' + chatID + '-' + trimmedKey;
 
     if (customPostfixName) {
         imageName = imageName + '-' + customPostfixName;
@@ -608,6 +610,22 @@ function getImageOriRawUrlByImageKey(ImageKey) {
     } else {
         return false;
     }
+}
+
+function trimKey(ImageKey) {
+    if (!ImageKey) {
+
+        return false;
+    }
+
+    let trimmedKey = ImageKey.substring(ImageKey.lastIndexOf('/') + 1, ImageKey.lastIndexOf('.jpeg~') - 1);
+
+    if (!trimmedKey) {
+
+        return false;
+    }
+
+    return trimmedKey;
 }
 
 function getYmdHMS() {
