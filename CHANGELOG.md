@@ -4,6 +4,19 @@
 
 **Notice doubao.com is using *canary release* so this new release will not work for old web version. If your web version is not changed, use the old release instead.**
 
+## 0.3.0
+
+It's a long time since last update.
+
+- Add @connect to prevent XHR Dialog. Now there is no need to bother the _XHR Security_ any more.
+- Fix Prompt download.
+- Fix image download failure when the official no-watermark is on.
+- New-feature/Break-change: ImageKey as Image filename postfix
+
+One of main reason I made this userscript is to automatically rename downloads, to prevent duplicate filenames. The old way was using chatID and a timestamp as the filename postfix, but it could not avoid duplicate downloads.
+
+The no-watermark video download is using it's video_id, and now the no-watermark image download will also use it's ImageKey. Now each file has it's unique postfix. This means when you download the same image/video multiple times, the filenames will be the same, and the browser/system will automatically add `(n)`, indicating you they are duplicate downloads.
+
 ## 0.2.4
 
 - Fix a bug caused by some conversations only have one video link.
