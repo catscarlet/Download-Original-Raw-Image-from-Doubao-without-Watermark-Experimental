@@ -64,16 +64,6 @@
 
 ![snap3-020.webp](snap3-020.webp)
 
-注意：初次使用时，因本用户脚本使用脚本管理器的 `GM_xmlhttpRequest` 特性进行跨域请求，脚本管理器会询问是否允许访问跨域资源。请允许此类操作。
-
-![snap-cors1-020.webp](snap-cors1-020.webp)
-
-如您失误点击了禁止并将其加入了黑名单，则请打开脚本编辑器，编辑本脚本，并点击标签页上的Setting，然后在页面内找到 `XHR Security` 并在 `User domain blacklist` 中将域名移除黑名单。
-
-![snap-cors2-020.webp](snap-cors2-020.webp)
-
-![snap-cors3-020.webp](snap-cors3-020.webp)
-
 ### 兼容性
 
 脚本可正确在以下用户脚本管理器中运行：
