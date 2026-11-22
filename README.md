@@ -84,6 +84,7 @@
 -   部分会话的图片无法下载。
 -   ~（20260601）版本0.1.0后有时会出现无法下载的情况，刷新可以解决。（豆包逻辑变更，此问题已无法复现）~
 -   如果你的视频生成时间很早，可能豆包会使用本脚本不支持的旧API来提供。如有此类情况，请使用这个[Download-from-Doubao-Video-Sharing-without-Watermark 从豆包分享页面下载无水印视频](https://github.com/catscarlet/Download-from-Doubao-Video-Sharing-without-Watermark)脚本进行下载。
+-   **下载的Prompt文档在某些情况下，可能与用户输入不同。其内容可能会为由AI自己润色修改过的文档，且可能会丢失部分信息量。如为严谨考虑，请手工保存Prompt文本。**
 
 本项目欢迎 Pull Request 修复以上这些问题。
 
